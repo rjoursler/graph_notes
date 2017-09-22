@@ -1,0 +1,2102 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{mathabx}
+\usepackage[top=1in,bottom=1.25in,left=1.25in, right=1.25in]{geometry}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{problem}{Problem}
+
+\begin{document}
+\section{Introduction} This document contains theorems and sample
+problems for the Graph Theory Comprehensive exam at Arizona State
+University. Most of the theorems are found in Diestel's Graph Theory
+and when a theorem number is mentioned, that number refers to the 3rd
+edition. Most of the proofs that are provided are generally similar to
+proofs in Diestel's Graph Theory, or West's Introduction to Graph
+Theory. This document was originally formed while studying for the ASU
+graph theory comprehensive and as such is incomplete. Some proofs are
+missing, some proofs are better described as proof summaries, and the
+occasional proof may be incorrect. Any corrections/additions to this
+document are welcome and can be submitted to this documents GitHub
+page located at https://github.com/rjoursler/graph\_notes.
+
+\section{Basic Theorems}
+\begin{theorem} (1.4.2) If $G$ is non-trivial, then
+  $\kappa(G) \leq \lambda(G) \leq \delta(G)$.
+\end{theorem}
+\begin{proof} Let $G$ be a non-trivial graph. To show that
+  $\kappa(G) \leq \lambda(G)$, let $C$ be a a set of edges with
+  $|C| = \lambda(G)$ which separates $G$ into sets $A$ and $B$. Note
+  $|A|, |B| \geq \lambda(G)$. By deleting the ends of edges in $C$
+  from $G$ in such a way that $A$ and $B$ are still non-empty we get
+  $\kappa(G) \leq \lambda(G)$. If this cannot be done, then
+  $\lambda(G) = 1$ and $|A| = |B| = 1$, implying $G = K_2$ in which
+  the claim still holds. For the fact that
+  $\lambda(G) \leq \delta(G)$, note than any vertex $v$ can be
+  disconnected from the graph by deleting all edges which contain $v$.
+\end{proof}
+
+\begin{theorem} (1.5.6) Every connected graph contains a normal spanning tree, with any
+  specified vertex as its root.
+\end{theorem}
+\begin{proof} The depth first search algorithm will yield a normal
+  tree starting from any vertex. Since $G$ is connected, every vertex
+  will be visited, thus the spanning tree is normal.
+\end{proof}
+
+\begin{theorem} (1.6.1) A graph is bipartite iff it contains no odd cycle.
+\end{theorem}
+\begin{proof} The forward direction follows immediately since an odd
+  cycle is $3$-partite.\\
+  For the backward direction, assume $G$ is a graph which contains no
+  odd cycle. WLOG we may assume that $G$ is connected, otherwise we
+  can reduce the problem to independently partitioning all the
+  connected subgraphs of $G$. Let $v \in E(G)$. Define the set $A$ to
+  be the set of vertices $a$ such that there is an even path from $v$
+  to $a$ and $B$ to be vertices $b$ such that there is an odd path
+  from $v$ to $b$. Since $G$ is connected $A \cup B = V(G)$. Also, if
+  the edge $xy$ exits within $A$ or $B$, then $x,y \in A$ and
+  $x,y \in B$. Finally, note that $A \cap B = \emptyset$ otherwise an
+  odd cycles could be found. Thus $G$ is bipartite with bipartition
+  $A,B$.
+\end{proof}
+
+\begin{theorem} (1.4.3 Maders Theorem) Let $0 \neq k \in
+  \mathbb{N}$. Every graph $G$ with $d(G) \geq 4k$ has a $(k + 1)$
+  connected subgraph $H$ such that $\epsilon(H) \geq \epsilon(G) - k$.
+\end{theorem}
+\begin{proof} Consider all graphs $G' \subseteq G$ such that
+  $||G'|| \geq \epsilon(G) (|G'| - k)$. Such graphs exists since $G$
+  satisfies these conditions. Let $H$ be such a graph such that $|H|$
+  is minimum. By the minimality of $H$, $\delta(H) \geq \epsilon(G)$,
+  otherwise we could delete such vertex to find a smaller graph
+  $H'$. Thus $|H| > \epsilon(G)$. Using this fact gives
+  \[
+    \epsilon(H) = \dfrac{||H||}{|H|} > \epsilon(G)(1 - \dfrac{k}{|H|})
+    \geq \epsilon(G) - k
+  \]
+  as desired.
+
+  All that is left to show is that $H$ is $k + 1$-connected. Assume to
+  the contrary. Then $H$ has a separating set $X$ of size at most $k$
+  which separates sets $A$ and $B$. Consider the graph $H[A \cup
+  X]$. Because of the minimum degree in $H$, for any vertex $a \in A$,
+  the degree of $a$ in $H[A \cup X]$ is at least $\delta(H)$ implying
+  $|H[A \cup X]| \geq 2k$. The same applies for $H[B \cup X]$. Thus we
+  get that
+  \[
+    ||H[A \cup X] || \leq \epsilon(G)(|H[A \cup X] - k)
+  \]
+  and
+  \[
+    ||H[B \cup X] || \leq \epsilon(G)(|H[B \cup X] - k)
+  \]
+  This implies that
+  \[
+    \begin{array}{rcl} ||H|| & \leq & ||H[A \cup X]|| + ||H[B \cup X]||\\
+                             & \leq & \epsilon(G) (|H[A \cup X] + |H[B
+                                      \cup X]| - 2k)\\
+                             & \leq & \epsilon(G) (|H| - 2k + |X|)\\
+                             & \leq & \epsilon(G) (|H| - k)\\
+    \end{array}
+  \]
+  a contradiction.
+\end{proof}
+
+\begin{theorem} (1.8.1) A connected graph is Eulerian iff every vertex
+  has even degree.
+\end{theorem}
+\begin{proof} To begin with, assume $G$ is an Eulerian graph with
+  Eulerian tour $W$. Note that every vertex must be entered as many
+  times as it is exited in the tour $W$ thus every vertex in $G$ must
+  have even degree.\\
+  For the reverse direction, let $G$ be a connected graph such that
+  every vertex has even degree. Let $W = v_0 v_1 \ldots v_\ell$ be a
+  maximum length walk such that each edge appears at most once. Since
+  the degree of $v_0$, $v_0 = v_\ell$. Thus $W$ is a closed walk. If
+  $G$ has an edge outside of the walk then we can extend the walk, a
+  contradiction.
+\end{proof}
+
+\begin{theorem} (Dirac's Theorem 10.1.1) Every graph with $n \geq 3$
+  vertices and a minimum degree at least $n/2$ has a Hamilton cycle.
+\end{theorem}
+\begin{proof} To begin with, note that $G$ must be connected, because
+  the maximum degree in the smallest component otherwise would be less
+  than $n/2$.  Let $P = v_0, \ldots, v_k$ be a maximum path in $G$. By
+  the maximality, of $P$, $N(v_0), N(V_k) \in V(P)$. If there is an
+  edge from $v_0$ to $v_k$ then we get a cycle $C$ on the vertices of
+  $P$. Otherwise, since the size of $P$ is smaller than $n$, by pigeon
+  hole, there must exists vertices $x_i$ and $x_{i + 1}$ such that
+  $v_0 x_{i + 1}$ and $v_k x_i$ are edges creating a different cycle
+  $C$ on the vertices of $P$. If $C$ is not spanning, then by the
+  connectivity of $G$, $C$ is connected to a vertex not in $C$, which
+  forms a longer path contradicting maximality of $P$.
+\end{proof}
+
+\begin{theorem} (Konig's Theorem 2.1.1) Let $G$ be a bipartite
+  graph. Then the size of the maximum matching in $G$ is equal to the
+  size of a minimum vertex covering in $G$
+\end{theorem}
+\begin{proof} Let $G$ be a bipartite graph with bipartition
+  $(A,B)$. To begin with note that the size of the minimum covering
+  has to be at least as large as the maximum matching in order to
+  cover every edge in a maximum matching. Now for equality, consider a
+  maximum matching $M$. We will create a covering $C$ by choosing a
+  one vertex from each edge of the matching, picking a vertex from $B$
+  if an alternating path with an unmatched vertex in $A$ ends on that
+  vertex, and picking the vertex from $A$ otherwise. Now we will show
+  that the set of vertices $C$ forms a covering.
+
+  Let $ab \in E$ be any edge in $G$. We will show that either $a$ or
+  $b$ lies in $C$. If $ab \in M$, then this holds trivially, so we may
+  assume that $ab \notin M$. To begin with, assume that $a$ is not
+  matched by $M$. Then there must exists an edge $a'b \in M$, and
+  since $b$ is the end of the alternating path $ab$, $ab$ is covered
+  by $C$. Otherwise there exists an edge $ab' \in M$. If $a \in C$,
+  then we are done. Otherwise $b' \in C$ by construction, so there is
+  an alternating path ending in $b'$. But this creates an alternating
+  path ending in $b$ as well. Since $M$ is maximum, that implies $b$
+  is matched with an edge $a'b \in M$ and thus $b \in C$. Therefore
+  $C$ is an edge cover proving the theorem.
+\end{proof}
+
+\begin{theorem} (Hall's Theorem 2.1.2) A bipartite graph $G$ with
+  bipartition $(A,B)$, contains a matching of $A$ iff
+  $|N(S)| \geq |S|$ for all $S \subseteq A$.
+\end{theorem}
+\begin{proof} To begin with, note that a matching of $A$ immediately
+  that $|N(S)| \geq |S|$ for all $S \subseteq A$. Now to show the
+  other direction, assume $G$ is a bipartite graph with bipartition
+  $(A,B)$ such that $N(S) \geq |S| $ for all $S \subseteq A$. Let $M$
+  be a maximum matching of $A$ and assume that $A$ is not
+  matched. Therefore there exists a vertex $a \in A$ not matched by
+  $M$. Let $A'$ be the set of vertices reachable from $a$ by an
+  alternating path, and let $B'$ be the penultimate vertices in all
+  such paths. Since very vertex of $A'$ corresponds to at least one
+  vertex of $B'$ we get that $|A'| \leq |B'|$. Similarly, every
+  neighbor of a vertex $a' \in A$, must appear in $B'$, otherwise we
+  could find either a new alternating path or an augmenting path. Thus
+  $|A'| = |B'|$ by the assumption.  Thus by the assumption, if
+  $S = A' \cup \{ a\}$, there must be an edge $ab$ such that
+  $b \notin B'$. Note that $b$ must be matched otherwise we could add
+  $ab$ to the matching $M$ contradicting maximality. But then $b$ is
+  the penultimate vertex some some alternating path starting at $a$
+  and that $b \in B'$, a contradiction. Therefore $M$ must match all
+  of $A$.
+\end{proof}
+
+\begin{theorem} (2.1.3) If $G$ is a $k$-regular bipartite graph with
+  $k \geq 1$, then $G$ has a 1-factor
+\end{theorem}
+\begin{proof} Since $G$ is $k$-regular, then $|A| = |B|$. Thus if we
+  can find a perfect matching of $A$ onto $B$, then we are done. Let
+  $S \subseteq A$. Note that the degree sum of vertices in $N(S)$ is
+  at least as large as the degree sum of the vertices of $S$. Since
+  $G$ is $k$ regular we get that $k |S| \leq k N(S)$. Thus by Hall's
+  Marriage theorem we get a matching of $A$ onto $B$.
+\end{proof}
+
+\begin{theorem} (Petersen's Theorem 2.1.5) Every regular graph of
+  positive even degree has a 2-factor.
+\end{theorem}
+\begin{proof} Let $G$ be a regular graph of positive even
+  degree. Since every vertex has even degree, there exists an Eulerian
+  tour $W$. Use this tour to induce an orientation of $G$ and then
+  create to copies of $V(G)$, $V^-$ and $V^+$. Let $v_- v_+$ be an
+  edge between those two sets iff $v_- v_+$ is an edge in the
+  orientation of $G$. Note that by definition this new graph of $V^-$
+  and $V^+$ is $k$ regular, thus there exists a matching of $V^-$ onto
+  $V^+$. Projecting this matching back into $G$ then provides a
+  2-factor of $G$.
+\end{proof}
+
+\begin{theorem} (Stable Matching Theorem 2.1.4) Let $G$ be a bipartite
+  graph. For every set of preferences, $G$ has a stable matching.
+\end{theorem}
+\begin{proof} Construct a matching greedily as follows. Given a
+  matching $M$, for a given vertex, $b$ say that a vertex $a \in A$ is
+  acceptable if $a$ is unmatched or of $b$ prefers $a$ over its
+  current matched neighbor. Starting with the empty matching, pick a
+  vertex $a$ such that $a$ is unmatched but acceptable to some
+  $b$. Then add the edge $ab$ to the matching for the $b$ that $a$
+  most prefers, while deleting any edge $bc$ already existing in our
+  matching. Since this always increases the happiness of a vertex $b$,
+  this algorithm must end. Note at each step, no vertex $a$ desires to
+  pick a different vertex $b$ since it chose the best possible one
+  when the edge $ab$ was added and once a vertex is matched in $b$, it
+  will always be matched. Thus the matching is stable.
+\end{proof}
+
+\begin{theorem} (Tuttes's Theorem 2.2.3) Every graph $G$ contains a
+  subset $S$ such that $S$ is matchable to $C_{G - S}$ and every
+  component in $G-S$ is factor critical.
+\end{theorem}
+\begin{proof} The proof is by induction. For the base case, not that
+  when $|G| = 0$, the claim holds. For the induction, pick $G$ and
+  consider all sets $T$ such that $q(G-T) - |T|$ is maximized. Let $S$
+  be the the the set for which $|T|$ is also maximized. Now note that
+  there must be no even sized components in $G - S$, otherwise we
+  could get a larger set $S'$ by moving a vertex from the even
+  component into $S$. This new set $S'$ still maximizes
+  $q(G-S) - |T|$, thus contradicting the maximality of $S$.
+
+  Now assume that there exists a component $C$ in $G - S$ such that
+  $|C|$ is not factor critical. Let $C' = C-c$ where $c$ is a vertex
+  such that $C'$ has no $1$-factor. Then by the inductive hypotheses
+  there exists a set $S' \subseteq C$ such that $q(C' - S') >
+  |S'|$. Since $|C'|$ is even, the parity of $q(C'-S')$ and $|S'|$ are
+  the same, thus $q(C'-S') \geq |S'| + 2$. But then for
+  $T = S \cup \{c\} \cup S'$,
+  $q(G-T) - |T| \geq q(G-S) - |S| - 1 - 1 + q(G - S') - |S'| \geq
+  q(G-S) - |S|$, once again contradicting choice of $S$.
+
+  Finally, all that is left is to show that $S$ is matchable onto the
+  components of $G - S$. Assume to the contrary, then by Halls theorem
+  there exists a set $S' \subseteq S$ such the set $S'$ is connected
+  to fewer components than $|S'|$. But than deleting $S'$ from $S$
+  destroys fewer odd components from $G-S$ than it removes from $S$,
+  thus increasing the size of $q(G-T) - |T|$, contradicting the choice
+  of $S$ again.
+\end{proof}
+
+\[
+  s_k := 4k(\log k + \log \log k + 4) if k \geq 2 1 if k \leq 1
+\]
+
+\begin{theorem} (2.3.1) Let $k \in \mathbb{N}$, and let $H$ be a cubic
+  multigraph. If $|H| \geq s_k$, then $H$ contains $k$ disjoint
+  cycles.
+\end{theorem}
+\begin{proof} The proof will be by induction. Note the claim is
+  trivial if $k \leq 1$. Let $C$ be a shortest cycle in $H$. If $C$ is
+  a loop $xx$, then the only vertex meeting $C$ is $x$. Since
+  $d(x) = 3$, the graph $H - C$ contains $|C|$ vertices with degree
+  exactly one. Thus none of these vertices are in a cycle in $H -
+  C$. Thus taking $H - V(C)$ only contains vertices of degree $2$ or
+  degree $3$. Suppressing the vertices of degree $2$ results in
+  another cubic multigraph. In this process, at most $2|C|$ vertices
+  were deleted from $H$ and at least $|C|$ vertices were
+  deleted. Since $|C| \leq 2 \log |H|$, we get that
+  $|H'| \geq s_k - 4 \log s_k = s_{k -1 }$ for $k \geq 2$.
+\end{proof}
+
+\begin{theorem} (Erdos, Posa 2.3.2) There is a function
+  $f: \mathbb{N} \to \mathbb{R}$ such that, given any
+  $k \in \mathbb{N}$, every graph contains either $k$ disjoint cycles
+  or a set of at most $f(k)$ vertices meeting all of its cycles.
+\end{theorem}
+\begin{proof} Let $G$ be any graph with fewer than $k$ disjoint
+  cycles. We may assume it has a cycle. Let $H$ be the maximal
+  subgraph of $G$ for which ever vertex has degree either $2$ or
+  $3$. Let $U$ be the vertices of $H$ with degree at least $3$. Let
+  $C$ be the set of all cycles that avoid $U$ and meet $H$. Since $H$
+  is maximal, each cycle must meet at exactly one point. Thus the set
+  $Z$ disconnects all such cycles. Let $Y$ be a set of vertices with
+  exactly one vertex from the two regular components of $H$ that avoid
+  $Z$. Note each vertex in $Z$ and $Y$ corresponds to a disjoint
+  cycle, thus $|Y \cup Z| \leq k - 1$. Now consider any cycle $C$
+  which avoids $X$. Then $C$ is not a component, so $C$ must meet
+  $U$. From $2.3.1$, if $|U| \geq s_k$, $H$ contains $k$ disjoint
+  cycles. Otherwise $U \cup Y \cup X$ meets every cycle in $G$ and
+  this set is smaller than $s_k + k - 1$.
+\end{proof}
+
+\begin{theorem}{2.4.3} Let $G$ be a graph and $F = (F_1, \cdots F_k)$
+  be a $k$-tuple of edge-disjoint forests such that the number of
+  edges contained in the forests of $F$ is maximum. Then for every
+  edge $e \notin F'_i$ for all $i$, for some $F'$ obtained by a series
+  of edge replacements, there exists a set $U$ with $e \subseteq U$
+  such that $U$ is connected in all $F_i$.
+\end{theorem}
+\begin{proof} Let $E^0$ be the set of all edges which can be removed
+  from all $F_i$ by series of edge replacement and define
+  $G^0 = (V, E^0)$. Let $C^0$ be a component in $G^0$. We claim that
+  $U = V(C^0)$ is connected in all $F_i$.
+
+  Consider a family of trees $F'=(F'_1, \ldots, F'_k)$ obtained by
+  replacing an edge of $F_i$. We claim that if $x,y$ are the end of a
+  path in $F'_i \cap C^0$, then $x F_i y \subseteq C^0$. To see why,
+  let $e = vw$ be the new edge in $F'$. We may assume that
+  $e \in x F'_i y$, because otherwise the claim is obviously. Thus it
+  suffices to show that $v F_i w \subseteq C^0$. Let $e'$ be any edge
+  in $v F_i w$. Since we could replace $e'$ by $e$ we have that
+  $e' \in E^0$. Since this applies to all $e'$ we get that
+  $vF_i w \subseteq C^0$.
+
+  To finish the proof of this theorem, we can obtain a new forest
+  tuple $F'_i$ by replacing $F_i$ using $e$. Since $e$ can be viewed
+  as an $xF'_i y$ path in $C_0$, we get that $x F_i y \subseteq
+  C_0$. As this applies for all $i$ and edges in $C_0$, $U$ must be
+  connected in every $F_i$.
+\end{proof}
+
+\begin{theorem} (Nash-Williams 2.4.1) A multigraph contains $k$
+  edge-disjoint spanning trees iff for every partition $P$ of its
+  vertex set it has at least $k(|P|-1)$ cross-edges.
+\end{theorem}
+\begin{proof} For the forward direction, note that the graph obtained
+  by contracting the parts in a partition $P$ into single vertices
+  results in a connected graph. Thus each edge-disjoint spanning tree
+  has at least $|P| - 1$ vertices crossing between parts, resulting in
+  at least $k(|P| - 1)$ crossing edges.
+
+  For the reverse direction will be proved by induction on $|G|$. Note
+  for $|G| = 2$, the assertion holds. Now pick a $k$-tuple of edge
+  disjoint forests $F = (F_{1},\cdots F_{k})$ such that the number of
+  edges is maximized. If each $F_{i}$ is a tree, then we are
+  done. Otherwise we have
+  \[
+    ||F|| = \sum_{i = 1}^k ||F_{i}|| < k(|G| - 1)
+  \]
+  On the other hand we know that $||G|| \geq k (|G| - 1)$ by the
+  assumption applied when $G$ is partitioned into $|G|$ parts. Thus
+  there exists an edge $e \notin F^0$. Thus by the previous lemma,
+  there exists a set $U$ with $|U| \geq 2$ that is connected in all
+  $F_i$. By the inductive hypothesis, $G\backslash U$ contains
+  $k$-edge disjoint trees $T_1 \cdots T_k$. Replacing the vertex $v_U$
+  in each $T_i$ with the corresponding graph $F_i[U]$ in $G$ then
+  gives $k$ edge-disjoint spanning trees in $G$.
+\end{proof}
+
+\begin{theorem} (Nash-Williams 2.4.4) A multigraph $G = (V, E)$ can be
+  partitioned into at most $k$ forests iff $||G[U]|| \leq k(|U| - 1)$
+  for every non-empty set $U \subseteq V$.
+\end{theorem}
+\begin{proof} For the forward direction, note that on any set $U$,
+  there are at most $|U| - 1$ edges associated with any forest. As
+  such, $||G[U]|| \leq k (|U| - 1)$ for all sets $U$.
+
+  The other direction will be proved by contrapositive. Assume that
+  $G$ cannot be partitioned into at most $k$ forests. Then for any
+  $k$-tuple $F = (F_1, \cdots F_k)$ with the number of edges
+  maximized, $F$ does not form a partition. But then there exists an
+  edge $e$ not in any $F_i$, so by a previous lemma there exists a set
+  $U$ such that $|U| \geq 2$ and such that $U$ is connected in every
+  $F_i$. But then $||G[U]|| \geq k(|U| - 1) + 1$.
+\end{proof}
+
+\begin{theorem} (Gallai \& Milgram 2.5.1) Every directed graph $G$ has
+  a path cover $\mathcal{P}$ and independent set
+  $\{ v_P | P \in \mathcal{P} \}$ of vertices such that $v_P \in P$
+  for every $P \in \mathcal{P}$.
+\end{theorem}
+\begin{proof} Let
+  $ter(\mathcal{P}) = \{ v_0, \cdots v_{|\mathcal{P}|} \}$ denote the
+  set of vertices ending the directed paths in $\mathcal{P}$. We will
+  prove by induction on $|G|$ that if $|ter(\mathcal{P})|$ is minimal
+  then there exists such an independent set as is claimed. Clearly
+  this is satisfied when $|G| = 0$. Let $\mathcal{P}$ be a path cover
+  over $G$ with $|ter(\mathcal{P})|$ minimal. If $ter(\mathcal{P})$ is
+  independent, then we are done. Otherwise we may assume that
+  $v_1 v_0$ is an edges. Let $v$ be the vertex preceding $v_0$ in the
+  path ending in $v_0$. Define $G' = G - v_0$. Now consider another
+  path family $\mathcal{P}'$ covering $G'$ for which
+  $ter(\mathcal{P'}) = \{ v, v_1, \ldots, v_{|\mathcal{P}|} \}$ (which
+  obviously exists). Now if this path family in $G'$ contains an
+  independent set then that set is obviously independent in $G$ as
+  well so we are done. Thus it suffices to show that
+  $|ter(\mathcal{P}')|$ is minimal.
+
+  For contradiction, assume there exists a family $\mathcal{P}''$ such
+  that $ter(\mathcal{P}'') \subset ter(\mathcal{P}')$. If $v$ or $v_1$
+  is in $ter(\mathcal{P}'')$, then this path cover can be extended to
+  a path cover in $G$ which contradicts the minimality of
+  $ter(\mathcal{P})$. Hence
+  $ter(\mathcal{P}'') \subseteq \{ v_3, \ldots, v_{|\mathcal{P}|}
+  \}$. But then $\mathcal{P}''$ and $v_1$ form a path cover of $G$
+  contradicting the minimality of $|ter(\mathcal{P})|$ again.
+\end{proof}
+
+\begin{theorem} (3.1.3) A graph is 2-connected iff it can be
+  constructed from cycles by successively adding $H$-paths to graphs
+  $H$ already connected.
+\end{theorem}
+\begin{proof} Note that any graph constructed as above must clearly be
+  $2$-connected. For the converse, let $G$ be a $2$-connected
+  graph. Since $G$ is $2$-connected it contains a cycle and thus $G$
+  has a maximum sized subgraph $H$ such that $H$ can be constructed by
+  successively adding $H$-paths to a cycle. Note that $H$ must be an
+  induced graph, because any edge not in $H$, but between vertices of
+  $H$ is an $H$-path. Finally, form connectivity there must exists an
+  edge $vw$ such that $v \in V(H)$ and $w \notin V(H)$. Since $G$ is
+  $2$-connected there must be a path $P$ from $w$ to $H$ in $G-v$, but
+  then $vwP$ is an $H$ path, contradicting the maximality of $H$.
+\end{proof}
+
+\begin{theorem} (3.2.1) If $G$ is $3$-connected and $|G| > 4$, then
+  $G$ has an edge $e$ such that $G/e$ is again $3$-connected.
+\end{theorem}
+\begin{proof} Assume there exists no edge $e$ such that $G/e$ is $3$
+  connected. Then for any edge $xy$, there must exists a vertex $z$
+  such that $\{v_{xy}, z\}$ is a separator in $G/e$, and therefore
+  ${x,y,z}$ must be a separator in $G$ since $G$ is
+  $3$-connected. Pick an edge $xy$ such that the separator $\{x,y,z\}$
+  produces a component $C$ of minimum size. Since $\{x,y,z\}$ is a
+  minimum separator, there must exists a vertex
+  $v \in N(z) \cap V(C)$, because otherwise $\{x,y\}$ would be a
+  separator for $C$. Let $w$ be the vertex associated with the edge
+  $zv$ so that $\{z, v, w\}$ is a minimum separator in $G$. Since $xy$
+  is an edge, there must exists a component $D$ of $G - \{z,v,w\}$
+  such that $V(D) \cap \{x,y\} = \emptyset$, since $x$ and $y$ are not
+  separated by $\{z, v, w\}$. Also, since
+  $N(v) \cap V(D) \subseteq V(C)$, we get that $D$ is contained in
+  $C$, contradicting the minimality of $C$.
+\end{proof}
+
+\begin{theorem} (3.2.2) A graph $G$ is $3$-connected iff there exists
+  a sequence $G_0, \ldots, G_n$ of graph with the following
+  properties:
+  \begin{itemize}
+  \item[(i)] $G_0 = K^4$ and $G_n = G$
+  \item[(ii)] There exists an edge $xy \in G_{i+1}$ with
+    $d(x), d(y) \geq e$ and $G_i = G_{i + 1} /xy$ for every $i < n$.
+  \end{itemize}
+\end{theorem}
+\begin{proof} Proof follows immediately from $3.2.1$.
+\end{proof}
+
+\begin{theorem} (3.2.3) The cycle space of a $3$-connected graph is
+  generated by its non-separating induced cycles.
+\end{theorem}
+\begin{proof} Let $G$ be a $3$-connected graph with $|G| = n$. We will
+  show that each cycle $C$ is a sum of non-separating induced cycles
+  by induction on $k(C) = n - b$ where $b$ is the order of the largest
+  component in $G-C$, and $b = 0$ if $V(G) = V(C)$. Since there are no
+  cycles with $k(C) = 0$, the base case trivially holds. Now let $C$
+  be a cycle assume the inductive hypothesis holds for all cycles $C'$
+  with $k(C') < k(C)$.
+
+  To begin with, if $C$ is a spanning cycles, then it contains a chord
+  $e$ because $G$ is $3$-connected. But then $C$ is the sum of two
+  non-spanning cycles $C_1,C_2 \subseteq C + e$ with $e \in C_1,
+  C_2$. Since $k(C_1),k(C_2) < n = k(C)$ due to the largest component
+  of $G -C_i$ having order at most $n - |C_i|$, we are done by the
+  inductive hypothesis.
+
+  Assume that $G-C$ is non-empty and let $B$ be the largest component
+  of $G-C$. Suppose there a $C$-path $P$ from $u$ to $v$ in $G-B$ such
+  that both $uCv$ paths contain an internal vertex in $N(B)$. Then
+  there are two cycles $C_1,C_2 \subset C \cup P$ with
+  $P \subset C_1, C_2$ such that $C$ is the sum of $C_1$ and
+  $C_2$. Also, there is a component in $G - C_i$ properly containing
+  $B$, so we are done by induction.
+
+  Assume there is no such path $P$. Then all vertices $v$ have a
+  neighbor in $B$. Assume to that contrary and let $v$ be a vertex
+  with $v \notin N(B)$. Let $x,y$ be $v$'s two closest neighbors with
+  $x,y \in N(B)$ and let $Q$ be the path from $x$ to $y$ on $C$
+  passing through $v$. Since $G$ is $3$-connected, $C-Q$ is nonempty
+  and there must be a path $P$ from $Q-x-y$ to $C-Q$ in $G - x -
+  y$. But this path has the property described above, a
+  contradiction. Thus all vertices in $C$ contain a neighbor in
+  $B$. Finally note that $C$ cannot contain a chord since that chord
+  forms one of the banned paths.
+
+  Thus $C$ is an induced cycles. If $C$ is non-separating then we are
+  trivially done. Otherwise there exits another component $B' \neq B$
+  in $G-C$. Let $P = u, \cdots v$ be a $C$-path through $B'$ and let
+  $Q$ be a $C-P$ path. Then there exists cycles
+  $C_1, C_2, C_3 \subset C \cup P \cup Q$ which sum to $C$. As before
+  $G - C_i$ has a component properly containing $B$, so we are done by
+  the inductive hypothesis.
+\end{proof}
+
+\begin{theorem} (3.3.1 Menger's Theorem) Let $G=(V,E)$ be a graph and
+  $A,B \subseteq V$. Then the minimum number of vertices separating
+  $A$ form $B$ in $G$ is equal to the maximum number of disjoint
+  $A$-$B$ paths in $G$.
+\end{theorem}
+\begin{proof} The proof is by induction. If $||G|| = 0$, then the
+  number of $A$-$B$ paths must equal $|A \cap B|$ since there are
+  $|A \cap B|$ trivial $A$, $B$ paths. Otherwise we have an edge
+  $e = xy$. Let $k$ be the size of the minimum separator separating
+  $A$ and $B$. Consider the graph $G / e$. If $v_c$ is the vertex
+  created by contraction, let $v_c \in A$ if $x$ or $y$ was in $A$
+  (and similarly for $B$). Then $G/e$ contains a minimum separator
+  $Y$. If $|Y| \geq k$, then we are done by induction. Thus
+  $|Y| \geq k$. Note that $v_c \in Y$, otherwise $Y$ would be a
+  separator of $G$, a contradiction. Define $X = Y - v_c + x +
+  y$. Then $X$ is an $A,B$ separator in $G$ on exactly $k$
+  vertices. Now consider $G-e$. By the inductive hypothesis there must
+  be $k$ disjoint $A-X$ paths and $k$ disjoint $B-X$ paths. These sets
+  of paths must be disjoint as well since $X$ is a
+  separator. Combining this paths produces $k$ disjoint $A$-$B$ paths.
+\end{proof}
+
+\begin{theorem} (3.3.6 Menger's Theorem (global version))
+  \begin{itemize}
+  \item A graph is $k$-connected iff it contains $k$-independent paths
+    between any two vertices.
+  \item A graph is $k$-edge connected iff it contains $k$ edge
+    disjoint paths between any two vertices.
+  \end{itemize}
+\end{theorem}
+\begin{proof} Follows immediately from 3.3.1.
+\end{proof}
+
+\begin{theorem} (3.4.1 Maders' Theorem) Given a graph $G$ with an
+  induced subgraph $H$, there are always $M_G(H)$ independent
+  $H$-paths in $G$.
+\end{theorem}
+\begin{proof} No proof given in Diestel
+\end{proof}
+
+\begin{theorem} (3.4.2) Given a graph $G$ with an induced subgraph
+  $H$, there are at least $1/2 \kappa_G (H)$ independent $H$-paths and
+  at least $1/2 \lambda_G(G)$ edge disjoint $H$-paths in $G$.
+\end{theorem}
+\begin{proof}
+\end{proof}
+
+\begin{theorem} (3.5.1) There exists a function
+  $h: \mathbb{N} \to \mathbb{N}$ such that every graph of average
+  degree at least $h(r)$ contains $K^r$ as a topological minor for
+  every $r \in \mathbb{N}$.
+\end{theorem}
+\begin{proof} The proof will be by induction. To begin with, note that
+  $h(r) = 1$ holds for $r \leq 2$. We will show by induction on
+  $m = r \cdots {r \choose 2}$ that if $G$ has average degree $2 ^ m$,
+  then $G$ has a topological copy of $X$ where $X$ has $r$ vertices
+  and $m$ edges. When $m = {r \choose 2}$ this will immediately imply
+  the claim. If $m = r$, then $G$ contains a cycle of length at least
+  $\epsilon(G) + 1 \geq 2^{r -1} + 1 \geq r + 1$. Letting $X = C^r$
+  suffices. Now assume $m > r$ and the claim holds for any smaller
+  value. If $G$ is not connected, then there exists a component of $G$
+  with at least the same average degree, and we are done by
+  induction. Thus $G$ is connected. Let $U$ be a maximum set of
+  vertices such that $U$ is connected and
+  $\epsilon(G \backslash U) \geq 2 ^ {m - 1}$. Note such a set exists
+  because deleting a vertex cannot decrease the average degree of $G$
+  to below $2 ^ {m - 1}$. Also, since $G$ is connected, $N(U)$ is
+  non-empty. Let $H = G[N(U)]$. Not $\delta(H) \geq 2 ^ {m -1}$,
+  otherwise we could add another vertex to $U$, contradicting $U$'s
+  maximality. Thus by the induction hypothesis, $H$ contains a $TY$,
+  with $|Y| = r$, and $||Y|| = m - 1$. Let $x,y$ be two non-adjacent
+  branch vertices. Since $G$ is connected there is a $x-y$ path in $U$
+  creating a $TX$ on $m$ vertices.
+\end{proof}
+
+\begin{theorem} (3.5.2) There is a function
+  $f: \mathbb{N} \to \mathbb{N}$ such that every $f(k)$-connected
+  graph is $k$-linked, for all $k \in \mathbb{N}$.
+\end{theorem}
+\begin{proof} Let $G$ be $h(3k) + 2k$ connected, where $h$ is as
+  defined in the previous Lemma. Let $X$ be the set of vertices
+  $s_1 \cdots s_k$ and $t_1 \cdots t_k$ we would like to connect. Then
+  $G - X$ contains $K$ a copy of $TK^{3k}$ since
+  $\kappa(G) \geq h(3k) \geq \delta(G)$. Let $U$ be the branch
+  vertices of a $K$. Since $G$ is $2k$ connected there are $2k$
+  independent paths from $s_1 \cdots s_k$ and $t_1 \cdots t_k$ to
+  $U$. Let $P$ be a set of paths minimizing the edges outside of
+  $K$. Label the non-ending vertices as $u_i$. Let $s'_i$ denote the
+  end the path $P_i$ starting at $s_i$ in $U$ and $t'_i$ denote the
+  end of $t_i$ in $U$. Note that $s'_i u_i$ in $K$ can only contain
+  vertices on $P_i$, by minimality of $P$. Thus there exists a path
+  from $s_i$ to $u_i$ that is disjoint from all other paths in
+  $P$. Similarly there is a path from $t_i$ to $u_i$, show that $G$ is
+  $k$-linked.
+\end{proof}
+
+\begin{theorem} (4.2.6) In a two connected plane graph, every face is
+  bounded by a cycle.
+\end{theorem}
+\begin{proof} Let $G$ be a two connected plane graph of minimum order
+  which contradicts the proposition. Since $G$ is 2-connected, it can
+  be constructed by adding $H$-paths, thus there exists graph $H$ and
+  an $H$-path $P$ such that $G = H \cup P$. By the minimality of $G$,
+  every face in $H$ is bounded by a cycles, so $V(P) \subseteq
+  F$. Since $P$ only effects $1$ face in $G$, we may assume that
+  $H = K_3$. There is obviously no way connect an $H$-path to $K_3$
+  invalidating the theorem. Thus theorem is true.
+\end{proof}
+
+
+\begin{theorem} (4.2.7) The face boundaries in a $3$-connected plane
+  graph are precisely its non-separating induced cycles.
+\end{theorem}
+\begin{proof} Let $C$ be a non-separating induced cycle, then $C$ must
+  obviously bound a face of $G$. For the converse. Let $f$ be a face
+  in $G$ and let $C$ be the cycle bounding $f$. If $C$ has a chord
+  $xy$, then the components of $C-\{x, y\}$ are linked by a $C$ path
+  in $G$, because $G$ is $3$ connected. This path must run through
+  $f$, a contradiction. Thus $C$ is induced. Now it remains to show
+  that $C$ does not separate any two vertices in $G - C$. By Menger's
+  theorem, there exists $3$ vertex independent paths between any two
+  vertices $x$ and $y$. Clearly $f$ lies inside a face of the union of
+  these paths. This path is bounded by only two of the paths, thus the
+  third path must avoid $C$ entirely.
+\end{proof}
+
+\begin{theorem} (4.2.8) A plane graph of order at least 3 is maximally
+  planar iff it s a plane triangulation.
+\end{theorem}
+\begin{proof} Let $G$ be a plane graph of order at least 3. Obviously
+  any plane triangulation must be maximally planar, since any edge
+  added must be added within a face. To show the other direction, let
+  $G$ by maximally planar and pick a face $F$. Note that $G[F]$ must
+  be complete, otherwise we could add an edge between the two
+  unconnected elements in $F$ through $F$ to find a larger planar
+  graph. Since $F$ is planar, this implies that $|F| \leq 3$. If
+  $|F| < 3$, then there exists only one face in $G[F]$, if there is an
+  edge from $F$ to another vertex, that vertex must also be in $F$
+  because there is now way for that edge to close off $F$ from a new
+  space. Thus if $|F| < 3$ there must be no other edges in the graph
+  contradicting $|G| \geq 3$. Thus $G[F] = K_3$, proving the claim.
+\end{proof}
+
+\begin{theorem} (4.2.9) Let $G$ be a connected planar graph with $n$
+  vertices, $m$ edges, and $f$ faces. Then $n - m + f = 2$.
+\end{theorem}
+\begin{proof} The proof is by induction on $|m|$. For the base case,
+  consider $n = m + 1$, in which case $G$ must be a tree since $G$ is
+  connected. Thus there is exactly one face yielding the desired
+  inequality. Otherwise $m > n - 1$. Then $G$ must contain a
+  cycle. Let $C$ be a cycle of minimum length and delete an edge from
+  the cycle, to obtain a graph $G'$. $G'$ contains exactly 1 fewer
+  edges and 1 fewer faces thus $n - (m - 1) + (f - 1) = 2$ which
+  immediately implies out conclusion.
+\end{proof}
+
+\begin{theorem} (4.4.2) A graph contains $K^5$ or $K_{3,3}$ as a minor
+  iff it contains $K^5$ or $K_{3,3}$ as a topological minor.
+\end{theorem}
+\begin{proof} The reverse direction is obvious since all topological
+  minors are also minors. To show that forward direction, if $G$
+  contains a $K_{3,3}$, it obviously contains a $TK_{3,3}$. So assume
+  $G$ contains a $K^5$ minor. Let $K$ be a minimal $K^5$ minor in
+  $G$. Then every branch set of $K$ induces a tree in $K$, and between
+  any two branch sets, $K$ has exactly one edge. Let $T_x$ be the tree
+  on vertex set $V_x$, including the edges connecting $V_x$ to the
+  other branch sets. From minimality, there are exactly $4$ such
+  edges, and $4$ leafs in $T_x$. If each of the $5$ treas from a
+  $TK{1,4}$, then we have found a $TK_5$. If $T_x$ is not a
+  $TK_{1,4}$, then it has exactly of vertices of degree
+  $3$. Contracting $V_x$ into these vertices and the other branch sets
+  into a vertex yields a graph on $6$ vertices containing a
+  $TK_{3,3}$, Thus $G$ contains a $TK_{3,3}$.
+\end{proof}
+
+\begin{theorem} (4.4.3) Every $3$-connected graph without a $K_5$ or
+  $K_{3,3}$ topological minor is planar.
+\end{theorem}
+\begin{proof} Proof is by induction. Note this applies when
+  $|G| \leq 4$. Otherwise, let $G$ be a planar graph on at least $5$
+  vertices. Since $G$ is $3$-connected, there exists an edge $xy$ such
+  that $G'=G/xy$ is $3$-connected. By the inductive hypothesis this
+  graph has a planar drawing. Consider the face $f$ containing
+  $v_{xy}$ in $G'-v_{xy}$, and let $C$ be the boundary of $f$. Note
+  that $C$ must be a cycle since $G'$ must be $3$-connected. Let
+  $X = \{ x_1, \cdots x_k\}$ be $N(x) \cap V(C)$ where the vertices
+  are enumerated in order around $C$. Define $Y$ to be
+  $N(y) \cap V(C)$. Let $P_i$ be the path on $C$ from $x_i$ to
+  $x_{i + 1}$.
+
+  Note that $N(y) \subseteq P_i$ for some $i$. Assume to the contrary,
+  then there exists vertices $y'$ and $y''$ not contained in the same
+  $P_i$, and these two vertices are separated by two vertices $x'$ and
+  $x''$ on $C$. Pick $y'$, $y''$, $x'$, $x''$ such that the number of
+  distinct vertices in maximized. If every vertex is distinct, then we
+  get a $TK_{3,3}$ with partition $(\{x, y', y''\}, \{y, x',
+  x''\})$. Because $G$ is $3$-connected, the fewest distinct vertices
+  possible is $3$, and this is only achieved if $N(X) = N(Y)$ with
+  $|N(X)| = 3$. In this case though, $N(X)$ along with $x$ and $y$
+  form a copy of $TK^5$. Thus $N(Y) \subseteq V(P_i)$ for some
+  $i$. But then we can construct a planar drawing of $G$ by starting
+  with a planar drawing of $G-y$ and placing $y$ and its edges inside
+  the face containing $x$ and $P_i$.
+\end{proof}
+
+\begin{theorem} (4.4.6) If $G$ is a graph, then the following are
+  equivalent:
+  \begin{itemize}
+    % \item $G$ is planar
+  \item $G$ contains no $K_5$ or $K_{3,3}$ minor.
+  \item $G$ contains not topological $K_5$ or $K_{3,3}$ minor.
+  \end{itemize}
+\end{theorem}
+\begin{proof} The proof immediately follows from 4.4.3 and 4.4.2, and
+  the observation that all maximally planar graphs on at least $4$
+  vertices are $3$-connected.
+\end{proof}
+
+\begin{theorem} (5.1.2) Every planar graph is $5$-colorable.
+\end{theorem}
+\begin{proof} The proof is the proof that every planar graph is 5
+  chooseable (5.4.2).
+\end{proof}
+
+\begin{theorem} (5.2.4 Brooks Theorem) Let $G$ be connected graph. If
+  $G$ is neither complete, nor an odd cycle, then
+  $\chi(G) \leq \Delta(G)$.
+\end{theorem}
+\begin{proof} Note that the statement is obviously true if
+  $\Delta(G) \leq 2$ since in that case $G$ is either a path or a
+  cycle. Let $G$ be a graph minimizing $|G|$ which is a counter
+  example to the theorem. Note that $G$ is not a complete graph. Pick
+  any vertex $x \in G$. Now consider the graph $G-x$ and note that
+  $\chi(G-x) \leq \Delta(G)$. This follows since if $G - x$ is a
+  complete graph or odd cycle, then $\Delta(G -x) < \Delta(G)$ since
+  $G$ is connected and otherwise $\Delta(G - x) \leq \Delta(G)$. Color
+  $G - x$ with $\Delta(G)$ colors. Since $G-x$ cannot be colored with
+  $\Delta(G)$ colors, the $N(x)$ must contain at least $\Delta(G)$
+  colors. Let $N(x) = \{v_1, v_2, \cdots v_{\Delta(G)} \}$ where $v_i$
+  has color $i$ in $f$.
+
+  Define $H_{i,j}$ be component of the graph induced by vertices with
+  colors $i$ and $j$ in the coloring of $G - x$. Note that $v_i$ and
+  $v_j$ must appear in the same component in $C_{i,j}$, otherwise, in
+  one of the components we could swap the colors to obtain a coloring
+  $f'$ in which $v$ and $w$ have the same color, allowing us to color
+  $x$ with either color $i$ or $j$.
+
+  We will show that $C_{i,j}$ must be a path. Otherwise there exists a
+  vertex $u$ which is as close to $v$ as possible which has degree at
+  least $3$. Then in $G-x$, $N(u)$ can contain at most $\Delta(G) - 1$
+  colors since 3 of the vertices have at most $2$ colors. Thus we can
+  swap the color of $u$ to the missing color to create a coloring
+  $f'$. Since $u$ was the color closest to $v$, in $f'$ $C_{i,j}$ $v$
+  and $w$ must now be in different components (if both $u$ and $v$ are
+  even in $C_{i,j}$ anymore), which will allow us to color $x$ once
+  again. Thus $C_{i,j}$ must be a path.
+
+  Now consider two such paths $P_{i,j}$ and $P_{j,k}$ between vertices
+  $v_i$, $v_j$ and $v_j$ and $v_k$. Then
+  $V(P_{i, j}) \cap V(P_{j,k}) = v_j$. Otherwise there exists a vertex
+  $u \in V(P_{i, j}) \cap V(P_{j,k})$. The vertex $u$ satisfies that
+  $4$ of its neighbors get $2$ colors. Thus $N(u)$ contains at most
+  $\Delta(u) - 2$ colors. Thus $u$ could be recolored creating the
+  same situation as described previously.
+
+  Now finally we will use the previous properties to construct a
+  coloring of $G$. Note that $G$ must not be a complete graph, thus
+  there exists a vertex $x$ who's neighborhood is not complete. Let
+  $f$ be a coloring of $G-x$ such that $v_1v_2$ is not an edge in
+  $G$. Now construct a new coloring $f'$ by swapping the colors $1$
+  and $3$ on $P_{1,3}$. Consider the vertex $u$ which is the neighbor
+  of $v_1$ on $P_{1,2}$. Since no vertices of color $2$ were changed,
+  $u$ must be the neighbor of $v_1$ in $P'_{2, 3}$ or else we are
+  finished by the above properties. Also, since
+  $P_{1,3} \cap P_{1,2} = v_1$, $u$ must be in $P'_{1,2}$ as well or
+  we are finished by the above properties again.  Finally, note that
+  $u$ contradicts the final property allowing us to construct a proper
+  coloring anyways.
+\end{proof}
+
+\begin{theorem} (Mycelskis construction) There exists a triangle free
+  graph with chromatic number $k$ for any integer $k$.
+\end{theorem}
+\begin{proof} The proof is by induction. For $k \leq 2$, the problem
+  is trivial.  Let $G$ be a $k$ chromatic triangle free
+  graph. Construct a new graph $G'$ on $V(G)$, $U$ and $\{w\}$, where
+  $G'[V(G)] = G$, $v_i u_j$ is an edge iff $v_i v_j$ is an edge in
+  $G$, and where $N(w) = U$. Note that after doing this, $G'$ is still
+  triangle free. Note that a coloring of $V(G)$ can be extended to $U$
+  to obtain a proper coloring of $G'$. Thus
+  $\chi(G') \leq \chi(G) + 1$. Now it suffices to show that
+  $\chi(G) < \chi(G')$. Let $G$ be a proper color of $G'$ on fewer
+  than $\chi(G) + 1$ colors. We may assume that $G(w) = k$. Thus there
+  are $k-1$ colors on $U$. Let $A$ be the set of vertices on $G$ with
+  color $k$. For each vertex in $v_i \in A$, change the color of $v_i$
+  to $u_i$. Since $v_i$ and $u_i$ the same neighbors (excluding $w$),
+  this gives a proper coloring of $G$ on fewer than $\chi(G)$ colors,
+  a contradiction.
+\end{proof}
+
+\begin{definition} A graph $G$ is $k$-constructible if it is
+  isomorphic to one of the following:
+  \begin{itemize}
+  \item[(i)] $K^k$.
+  \item[(ii)] $(G' + xy)/xy$ where $G'$ is a $k$-constructible graph
+    with vertices $x$ and $y$ that are non-adjacent.
+  \item[(iii)] $(G_1 \cup G_2)-xy_1 - xy_2 + y_1y_2$ where $G_1$ and
+    $G_2$ are $k$-constructible with $V(G_1) \cap V(G_2) = x$ and
+    $xy_i \in G_i$.
+  \end{itemize}
+\end{definition}
+\begin{theorem} (5.2.6) Let $G$ be a graph $k \in \mathbb{N}$. Then
+  $\chi(G) \geq k$ iff $G$ has a $k$-constructible subgraph.
+\end{theorem}
+\begin{proof} The proof of the forward direction is done by induction
+  on the minimum number of steps to construct $G$ using the
+  $k$-constructible constructions. Let $G$ be a $k$-constructible
+  graph. If $G = K^k$, then obviously $\chi(G) \geq k$. Otherwise if
+  the last step to construct $G$ was such that $G = G' + xy /xy$, then
+  a coloring of $G'$ immediately induces a color on $G$ by setting the
+  color of $x$ and $y$ to be the same as the contracted vertex and
+  leaving all other vertices the same color. Finally, if the last step
+  to construct $G$ results form $G = G_1 + G_2 -xy_1 - xy_2 + y_1y_2$,
+  then a coloring of $G$ forces the color of $x$ to be 1different from
+  one of $y_1$ or $y_2$. Thus the coloring of $G$ induces a coloring
+  on $G_1$ or $G_2$, thus $\chi(G) \geq k$.
+
+  For the reverse direction, let $G$ be an edge maximal graph with
+  $\chi(G) = k$ without a $k$-constructible subgraph. Note $G$ is not
+  complete $r$-partite, because otherwise $G$ would have to contain
+  $K^k$. Thus there exists an edge $y_1 y_2$ and vertex $x$ such that
+  $xy_1$ and $xy_2$ is not an edges. Note $G + x y_i$ must contain a
+  $k$-constructible subgraph $H_i$ because $G$ is edge maximal. Let
+  $H'_2$ be an isomorphic copy of $H_2$ such that
+  $H'_2 \cap H_1 = \{x\}$, $|V(H'_2) \cap V(H_2)|$ is maximized, and
+  all vertices in $H'_2 - H_2$ are not in $G$. Then
+  $H_1 \cup H'_2 - xy_1 - xy'_2 + y_1y'_2$ is $k$-constructible. Now
+  for every vertex $v' \in H'_2 - G$, let $v$ be the corresponding
+  vertex in $H_2$ construct another $k$-constructible graph by adding
+  and then contracting the edge $v'v$ to create another
+  $k$-constructible graph. This new graph $H$ is then a
+  $k$-constructible subgraph of $G$, a contradiction.
+\end{proof}
+
+\begin{theorem} (5.3.2 Vizing's Theorem) Every graph $G$ satisfies
+  $\Delta(G) \leq \chi'(G) \leq \Delta(G) + 1$.
+\end{theorem}
+\begin{proof} Note that obviously $\Delta(G) \leq \chi'(G)$. So
+  consider the inequality of $\chi'(G) \leq \Delta(G) + 1$. This
+  inequality is true when $G$ is the empty graph. Let $G$ be the
+  counter example minimizing $||G||$. Note that for any proper edge
+  coloring of $G-xy'$ with $xy' \in G$, there must be some color
+  $\alpha$ missing among edges ending at $x$ and some color $\beta$
+  missing among edges ending at $y'$. Now consider a maximal
+  $\alpha \beta$ path $P$ starting at $y'$. Then this path must end at
+  $x$, otherwise we could swap the coloring on the path $P$ and color
+  the edge $xy'$ with $\alpha$ to get a proper coloring of $G$.  Let
+  $x$ be a vertex in $G$, and $xy_0$ an edge. Then $G-xy_0$ has an
+  edge coloring $f_0$ using at most $\Delta(G) + 1$ colors. Let
+  $y_0, y_1, \cdots y_k$ be a maximal sequence of the neighbors of $x$
+  such that the color of the edge $x y_{i + 1}$ is missing among edges
+  ending at $y_i$. Note that for any edge $x y_j$ we can create a
+  coloring $f_j$ for $G-x y_j$ based on the coloring $f_0$ by
+  assigning $x y_i$ the color of $x y_{i + 1}$ in $f$ for $i < j$ and
+  keeping all other colors the same. Let $\beta$ be the coloring
+  missing at $y_k$. Then the maximal $\alpha$-$\beta$ path must start
+  at $y_k$ and end at $x$. Let $y$ be the vertex preceding $x$ on this
+  path. From the maximality of the sequence $y_0, y_1, \cdots y_k$,
+  $y = y_j$ for $j < k$ since $x y$ has color $\beta$. Now consider
+  the coloring $f_j$ of $G - xy$. Then the $\alpha-\beta$ path
+  starting at $y_k$ must end at $y$. Thus the colors on this path
+  could be swapped so that $xy_j$ can be colored with $\alpha$ to
+  obtain a proper edge coloring of $G$.
+\end{proof}
+
+\begin{theorem} (5.4.2) Every planar graph is $5$-chooseable.
+\end{theorem}
+\begin{proof} Proof by induction, but with the extra hypothesis that
+  every connected planar graph whose external vertices form a cycle
+  can be list colored if the list on all interior vertices has size at
+  least $5$ and all exterior vertices has size at least $3$ and two
+  adjacent exterior vertices $v_1$ and $v_2$ are already colored. This
+  is sufficient because one can always add edges to a planer graph $G$
+  to form a cycle, unless $|G| < 3$ in which case the claim is
+  trivially true.
+
+  For the base case, note the new claim trivially holds when
+  $|G| \leq 3$. Now let $G$ be a connected planar graph with exterior
+  vertices in a cycle $C = v_1 \cdots v_k$ and assign $G$ a lists such
+  that it satisfies the inductive hypothesis. To begin with, assume
+  that $G$ has a cord $vw$. Then we can split $G$ into two planar
+  graphs, one of which contains $v_1$ and $v_2$ and the other which
+  doesn't. By induction we can color the graph containing $v_1$ and
+  $v_2$. Now setting the colors of $v$ and $w$ as found in the last
+  coloring we can again by our inductive hypothesis color the other
+  cycle. Otherwise for the vertex $v_k$, reserve two colors which are
+  not the color of $v_1$ and delete these colors from its interior
+  neighbors. Then by the inductive hypothesis we can color
+  $G-v_k$. Since $v_{k-1}$ is the only neighbor of $v_k$ which could
+  have one of the colors reserved for $v_k$ we can still color $v_k$.
+\end{proof}
+
+\begin{theorem} (5.4.3) Let $H$ be a graph and ${(S_v)}_{v \in V(H)}$
+  a family of lists. If $H$ has an orientation $D$ with
+  $d^+(v) < |S_v|$ for every $v$, and such that every induced subgraph
+  of $D$ has a kernel, then $H$ can be colored from the lists $S_v$.
+\end{theorem}
+\begin{proof} The proof is by induction on $|G|$. If $|G| = 0$, then
+  the claim is obviously true. Otherwise let $G$ be a graph satisfying
+  the hypothesis. Let $\alpha$ be a color and let $T$ be the set of
+  vertices such that the color $\alpha$ is a possible color. Then the
+  graph $G[T]$ has a kernel $U$. Coloring all the vertices of $U$ with
+  the color $\alpha$ and deleting $U$ from $G$ and $\alpha$ from the
+  list of all other vertices in $T$ then creates a smaller graph still
+  satisfying the inductive hypothesis, thus completing the proof by
+  induction.
+\end{proof}
+
+\begin{theorem} (5.4.4) Every bipartite graph $G$ satisfies
+  $ch'(G) = \chi'(G)$.
+\end{theorem}
+\begin{proof} Let $G$ be a bipartite graph with partition $X,Y$ and
+  let $c$ be an edge coloring of $G$ in $\chi'(G)$ colors. Place an
+  ordering on the colors and let $H$ be the line graph of $G$ with a
+  direction applied to the edges as follows: Let $e_1$ and $e_2$ be
+  intersecting edges with $c(e_1) < c(e_2)$. If $e_1e_2$ meet in $x$
+  direct the edge from $e_1$ to $e_2$ and if $e_1e_2$ meet in $Y$,
+  direct the edge from $e_2$ to $e_1$. Now for a given edge $e$, the
+  out edges of $e$ that meet in $y$ must have colors strictly larger
+  than $c(e)$, and the color for edges meeting in $X$ must have color
+  strictly less than $c(e)$. Since any two neighbors of $e$ meeting in
+  $X$ or $Y$ are also neighbors, we get that $d^+(e) < k$. Now it
+  suffices to show that every induced subgraph of $H$ contains a
+  kernel. Let $Z$ be a subset of $X \cup Y$ and consider $G[Z]$. Let
+  the edge colors represent preferences. Then we can find a maximum
+  stable matching given these preferences. This stable matching is an
+  independent set $S$ in $H$. Since it is maximum, all out edges of a
+  vertex in $H$ must enter $S$, otherwise we would get a larger stable
+  matching. Thus $S$ is the desired kernel, and by the previous lemma,
+  $ch'(G) = \chi'(G)$.
+\end{proof}
+
+\begin{theorem} (5.5.1) A chordal graph can be constructed recursively
+  by pasting along complete subgraphs.
+\end{theorem}
+\begin{proof} Consider a chordal graph $G$. If $G$ is complete, then
+  we are done, otherwise let $a$ and $b$ two unconnected vertices. Let
+  $X$ be a minimal $a$-$b$ separator. Note that for any two vertices
+  $u, v \in X$, there must be a path through the component of $G - X$
+  containing $a$ and similarly in the component containing $b$. This
+  creates a cycle of length at least $4$, thus $u,v$ must be an edge
+  since $G$ is chordal.
+\end{proof}
+
+\begin{theorem} Every chordal graph contains a simplicial vertex
+\end{theorem}
+\begin{proof} The proof is by induction. Note this is true if
+  $G = K^1$. Now let $x \in V(G)$ such that $G-x$ is connected. Such a
+  vertex must as exist, otherwise consider a vertex $x$ such that
+  $G-x$ contains a component $C$ of minimum size. Then for $x' \in C$,
+  $G-x'$ must contain a smaller component as $x'$ is a cut vertex by
+  assumption. If $N(x) = V(G) - x$, then $G-x$ has a simplicial vertex
+  and adding $x$ to $G$ does not change this, so we are done
+  again. Otherwise $N(x)$ is a minimal vertex cut separating $x$ from
+  the rest of the graph. Since $G - x$ is connected, there is exactly
+  one component $C$ in $G - x - N(x)$. Also, by minimality there must
+  be a $u,v$ $C$-path for all vertex pairs $u,v \in N(x)$. Thus $u,v$
+  must be an edge since $G$ is chordal. Therefore $x$ is a simplicial
+  vertex and we are done.
+\end{proof}
+
+\begin{theorem} (5.5.2) All chordal graphs are perfect
+\end{theorem}
+\begin{proof} This proof is by induction. If $|G| = 1$. Otherwise,
+  every induced subgraph of $G$ is chordal, so we are done by
+  induction. Thus it just suffices to consider if
+  $\chi(G) \leq \omega(G)$. Since $G$ is chordal, $G$ can be created
+  by pasting along a complete subgraph. We can independently color
+  these two chordal subgraphs, permuting colors if necessary to create
+  a coloring of $G$. Since the subgraphs are chordal we get that
+  $\chi(G) \leq \omega(G)$ by induction.
+\end{proof}
+
+\begin{theorem} (5.5.4 Lovasz) A graph $G$ is perfect iff $\bar{G}$ is
+  perfect.
+\end{theorem}
+\begin{proof} This proof is by induction. Note that $|G| = 1$, then
+  this is true. Now let $G$ be a graph with $|G| > 1$. By inductions,
+  for any strict subgraph of $G$, the complement of that subgraph is
+  perfect, thus from symmetry, all that we need to show is that if $G$
+  is perfect, then $\chi(\bar{G}) \leq \omega(\bar{G})$. Let
+  $\mathcal{A}$ be the set of independent sets of size
+  $\alpha(G) := \alpha$. If $G$ contains a complete subgraph $X$ such
+  that $X \cap A \neq \emptyset$ for all $A \in \mathcal{A}$, then
+  $\chi(\bar{G}) \leq \chi(\bar{G - X}) + 1 = \omega(\bar{G - X}) + 1
+  = \omega(\bar{G})$. Thus $\bar{G}$ is perfect. Otherwise there is no
+  such $X$, in which case we will show that no such graph can
+  exists. Otherwise, let $\mathcal{K}$ represent the set of all
+  complete subgraphs of $G$. Then for each $K \in \mathcal{K}$, there
+  exists an independent set $A_K \in \mathcal{A}$ such that
+  $K \cap A_K = \emptyset$. Create a new graph $G'$ by expanding each
+  vertex $x$, $k(x)$ times where $k(x) = |{K | x \in A_K}|$. Note that
+  $G'$ is still perfect since expanding a vertex creates a graph which
+  is still perfect. Now in $G'$ we get that there is an
+  $X \in \mathcal{K}$ such that
+  $\omega(G') = \sum_{x \in X}, k(X) < |\mathcal{K}|$ since $A_K$ is
+  independent so each set $K$ can cause at most one vertex of $X$ to
+  expand, and $X \cap A_X = \emptyset$. On the other hand we get that
+  $|G'| \geq |K| \alpha$ since each $K \in \mathcal{K}$ got its own
+  copy of $A_K$ in the vertex expansion. Note the expansion didn't
+  change the size of the maximum independent set, so
+  $\chi(G') \geq |K|$, contradicting the perfection of $G'$.
+\end{proof}
+
+\begin{theorem} (5.5.5) Any graph obtained from a perfect graph by
+  expanding a vertex is again perfect.
+\end{theorem}
+\begin{proof} This proof is by induction on perfect graphs. If
+  $G = K^1$, then we are done. Let $G$ be any larger perfect
+  graph. Let $G'$ denote $G$ with the expanded vertex $x$. By
+  induction, any subgraph of $G'$ satisfies that
+  $\chi(G') \leq \omega(G')$, thus is suffices to consider only
+  $G'$. If $x \in K^{\omega(G)}$, then $G'$ contains a
+  $K^{\omega(G) + 1}$, so we can trivially color $x'$ and are
+  done. Otherwise let $\alpha$ be the color of $x$ in minimum coloring
+  of $G$. Let $X$ be the set of vertices in $G-x$ with color
+  $\alpha$. Note that every $K^{\omega(G)}$ must contain a vertex in
+  $X$. Thus $G - X$ is a perfect graph with
+  $\omega(G - X) = K^{\omega(G) - 1}$. Thus $G - X$ can be colored
+  with $\omega(G) - 1$ colors. Also, $X + x'$ is an independent set,
+  thus $G'$ can be colored with $\omega(G')$ colors.
+\end{proof}
+
+\begin{theorem} (5.5.6) A graph $G$ is perfect iff
+  $|H| \leq \alpha(H) \omega(H)$ for all induced subgraphs
+  $H \subseteq G$.
+\end{theorem}
+\begin{proof} For the forward direction, assume that $G$ is
+  perfect. Let $f$ be a coloring of $H$ for some subgraph of $G$. Then
+  $|H| \leq \alpha(H) \chi(H) = \alpha(H) \omega(H)$.
+
+  To show the reverse direction, let $G$ be the minimal counter
+  example and note that $G$ is non-empty. Then every subgraph of $G$
+  must be perfect. Thus for every independent set $U$,
+  $\chi(G - U) = \omega(G - U) \leq \omega(G)$ because $G - U$ is
+  perfect and has a coloring of size $\omega(G - U)$. In particular,
+  since $G$ is not perfect by assumption, we get that
+  $\omega(G - U) = \omega(G)$ implying there exists a $K^\omega$ in
+  $G-U$ for any independent set $U$. Let
+  $A_0 = \{ u_1 \cdots u_{\alpha(G)}$ be a set of of independent
+  vertices in $G$ of size $\alpha(G)$. For each $u_i \in A$, consider
+  an $\omega(G)$ coloring of $G - u_i$ and let $A_{i}$ through
+  $A_{i + \omega(G)}$ denote these color classes. For each independent
+  set $A_j$, there must exists a $K^{\omega(G)}$ in $G - A_j$. Let
+  $K_j$ denote the vertices of one such copy of $K^{\omega(G)}$ in
+  $G - A_j$. Construct a $\alpha(G)\omega(G) + 1 \times n$ matrix $A$
+  where the $j$th row forms an incidence vector of the vertices of
+  $A_j$ with the vertices of $G$. Similarly construct a
+  $n \times \alpha(G)\omega(G) + 1$ matrix $B$ where the $j$th row is
+  the incidence vector of the vertices of $K_j$ with the vertices of
+  $G$. Consider the matrix $C = AB$. By the construction, element
+  $c_{ij}$ of $C$ has the value of $|A_i \cap K_j|$, which must be
+  equal to $1$ if $i \neq j$ and $0$ if $i = j$. Thus the
+  $\alpha(G)\omega(G) + 1 \times \alpha(G)\omega(G) + 1$ matrix $C$ is
+  invertible, implying the rank of $A$ is at least
+  $\alpha(G) \omega(G) + 1$ implying
+  $|G| \geq \alpha(G) \omega(G) + 1$, contradicting the assumption
+  that $|G| \leq \alpha(G) \omega(G)$.
+\end{proof}
+
+\begin{theorem} (6.1.1) If $f$ is a circulation, then
+  $f(X, \bar{X}) = 0$ for every set $X \subseteq V$.
+\end{theorem}
+\begin{proof} $f(X, \bar{X}) = f(X, V) - f(X,X) = 0 - 0 = 0$.
+\end{proof}
+
+\begin{theorem} (6.2.2 Max flow / Min Cut) In every network, the
+  maximum total flow equals the minimum capacity of a cut.
+\end{theorem}
+\begin{proof} It is obvious that a max flow must be smaller than a
+  minimum capacity cut. To show the other direction constructed
+  through a maximal sequence of flows $f_0 \cdots f_n$ where $f_0$
+  gives a flow of 0 to every edge. For each $f_i$ associate a set
+  $S_n$ which is the set of vertices which can be reached by a walk
+  $W$ that only uses $e$ with $f(e) < c(e)$. If $t \in S_i$, then we
+  construct $f_{i + 1}$ by adding the maximum possible flow along a
+  walk $W$. Since this increases the flow by a fixed amount, and the
+  flow is bounded by the minimum cut. This sequence must end at some
+  $n$. But than $(S_n, \bar{S_n})$ forms a cut, which by definition
+  has max flow along each edge. Thus proving the theorem.
+\end{proof}
+
+\begin{theorem} (6.3.1) For every multigraph $G$, there exists a
+  polynomial $P$ such that for every finite Abelian group $H$, the
+  number of nowhere zero $H$-flows on $G$ is $P(|H| - 1)$.
+\end{theorem}
+\begin{proof} The proof will be by induction on $|G|$ and $||G||$. To
+  begin with, note that if $G$ is a graph with only loops, then we can
+  obviously generate such a polynomial. Otherwise there must exist
+  some edge $xy$ with $x \neq y$. Let $P_1$ be the polynomial for the
+  number of flows in $G-e$ and $P_2$ for $G/e$. Then we will show that
+  the polynomial $P$ for $G$ is $P= P_2 - P_1$. Note the flows in
+  $G-e$ are precisely the nowhere zero flows on every edge except for
+  $e$. Thus it suffices to show that $P_2$ is the number of flows on
+  $G$ and the nowhere zero flows on every edge except $e$. To show
+  that this works, consider a flow on $G$ that is possibly only zero
+  on $e$. Since $G/e$ doesn't destroy any edges, this flow translates
+  directly to a flow in $G/e$. Now it suffices to show there is an
+  injection from the flows on $G/e$ to $G$. Let $g$ be any flow on
+  $G/e$. Now consider the image of this flow in $G$ where each edge
+  that is not $xy$ is given the same value as in $G/e$. Then only the
+  vertices $x$ and $y$ have imbalances in flow. But the conservation
+  of flow then implies that every amount of flow accumulating at $x$,
+  a similar amount must be lost from $y$ (and vice versa). Thus there
+  is exactly on weighting of the edge $e$ such that we created a flow
+  $f$ in $G$ corresponding to $g$, thus completing the proof.
+\end{proof}
+
+\begin{theorem} (6.3.3) A multigraph admits a $k$-flow iff it admits a
+  $\mathbb{Z}_k$ flow.
+\end{theorem}
+\begin{proof} Let $\sigma_k$ be the obvious projection from
+  $\mathbb{Z}$ to $\mathbb{Z}_k$ If $f$ is a $k$ flow then $\sigma f$
+  is obviously a a $\mathbb{Z_k}$ flow. Now consider the other
+  direction. Let $g$ be a $\mathbb{Z}_k$ flow. Let $F$ be the set
+  functions such that $|f(e)| \leq k$, $f(xy) = - f(yx)$ for all
+  $f \in F$. Note that an element of $F$ can be constructed in the
+  obvious way from $g$, thus $F$ is non-empty. We would like to show
+  that there exits an element of $F$ which is flow. Towards this end,
+  consider the error of a flow to be $K(f) = \sum(|f(v, V)|)$. If
+  there exists a function $f$ such that $K(f) = 0$, then we are
+  done. Otherwise, let $f$ be such that $K(f)$ is minimum. Since
+  $K(f) > 0$, there exists a vertex $v$ such that $f(v,V) > 0$. Let
+  $A$ be the set of vertices which can be reached from $f$ by a
+  positive walk. $K(f)$ restricted to the vertices in $A$ has a value
+  of $f(A, \bar A - x) + f(A,A) + f(A,v)$. By the definition,
+  $F(A, \bar A - x) <= 0$, $f(A,v) \leq 0$. Also $f(A, A) = 0$ since
+  each edge is double counted, but in opposite directions so the flow
+  cancels. Thus there is a vertex such that $f(v', V)$ is
+  negative. Taking a positive walk from $v$ to $v'$, we can reverse
+  that walk, resulting in an $f'$ with smaller error. Thus $K(f) = 0$
+  providing a flow.
+\end{proof}
+
+\begin{theorem} (6.5.3) For every dual pair $G$, $G^*$ of plane
+  multigraphs, $\chi(G) = \phi(G^*)$.
+\end{theorem}
+\begin{proof} To begin with, note that if $G < 3$, then the claim is
+  obvious. The proof will be by induction on the number of bridge
+  edges in $G$. Skipping the base case for the moment, assume that $G$
+  contains a bridge edge $e$, $|G| \geq 3$, and the inductive
+  hypothesis holds. Note that $e^*$ is a loop. But then we get that
+  \[
+    \chi(G) = \chi(G/e) = \phi(G^* - e^*) = \phi(G^*)
+  \]
+  where the first equality comes from the fact that $G - e$ contains
+  two components that can be independently colored, the second follows
+  from the inductive hypothesis, and the third from the fact that
+  $e^*$ is a loop and $G^* - e^*$ contains an edge.
+
+  Now to complete the proof it suffices to show that the claim holds
+  in the base case where $G$ contains no bridge edges. To begin with,
+  note that if $G$ has a loop, then $G^*$ has a bridge, in which case
+  $\chi(G) = \infty = \phi(G^*)$ by convention.
+
+  Assume that there $G$ has no loop. Then it is known that Then there
+  is a bijective mapping from an orientation $E^*$ to an orientation
+  of $E$ such that a flow $g$ in $G^*$ is a circulation iff the flow
+  $f$ produced by composing the bijection between $E$ and $E^*$ and
+  $g$, satisfies that $f(X,X) = 0$ and $f(C) = 0$ for any directed
+  cycle under the orientation of $E$.
+
+  Assume that $\phi(G^*) = k$. Let $g$ be a $Z_k$ circulation on $G^*$
+  and $f$ the flow in $G$ from above. Consider a normal spanning
+  subtree $T$ with root $r$ of $G$ with the orientation used to create
+  $F$. Construct a coloring $c$ by coloring the vertex $v \in T$ with
+  the flow along the path from $r$ to $v$. Then this flow creates a
+  proper coloring of $G$. Let $e = xy$ be an edge in $G$. If $e = xy$
+  is an oriented edge in $T$, then since $g$ is a flow we get that
+  $c(x) \neq c(y)$. Otherwise, the edge $e$ completes a directed cycle
+  $C$ in the orientation of $G$ with $f(C) = 0$. Since $g$ is a
+  circulation we once again get that $c(x) \neq c(y)$. Thus
+  $\chi(G) \leq k$.
+
+  Finally assume that $\chi(G) = k$. Let $c$ be a $k$ coloring of
+  $G$. Define $f(u,v) = c(u) - c(v)$ for an directed edge $uv$. Note
+  that by definition $f(X,X) = 0$ and $f(C) = 0$ for any directed
+  cycle $C$. Thus there exists a flow $g$ in $G^*$ which is a
+  circulation. Thus $\phi(G^*) \leq k$, completing the proof.
+\end{proof}
+
+\begin{theorem} (6.4.3) For all even $n \geq 6$, $\phi(K^n) = 3$.
+\end{theorem}
+\begin{proof} To begin with, note that $\phi(K^n) > 2$ because every
+  vertex has odd degree when $n$ is even. The proof of the upper bound
+  will by by induction on $n$. For the base case consider $n = 6$ with
+  $G = K^6$. Then the edges of $G$ can be partitioned to form $G_1$,
+  $G_2$ and $G_3$ where $G_1$ and $G_2$ are copies of $K^3$ and $G_3$
+  is a copy of $K_{3,3}$.Note that $K_3$ has a $2$-flow and $K_{3,3}$
+  has a $3$-flow obtainable by assigning a flow of $1$ to every edge
+  from $A$ to $B$ where $(A,B)$ is the bipartition of
+  $K_{3,3}$. Combining all these flows yields a $3$-flow on $G$.
+
+  Now fix $n \geq 8$ and assume the inductive hypothesis holds for all
+  smaller even $n$. Note that the edges of $G = K^n$ can be
+  partitioned to form $3$ graphs $G_1$, $G_2$, and $G_3$, where
+  $G_1 = K^{n - 2}$, $G_2 = K_{2, n - 4}$, and $K^4 - e$ for any edge
+  $e \in K^4$. By the inductive hypothesis $G_1$ contains a
+  $3$-flow. For $G_2$, every vertex has even degree, and thus $G_2$
+  contains a $2$-flow. Finally for $G_3$, let $v_1$, $v_2$, $v_3$, and
+  $v_4$ denote the vertices of $G_3$ where the edge $v_3 v_4$ is the
+  only non-edge in $G_3$. Letting the $3$-flow $f:Z^k \to E(G_3)$
+  defined by setting $f(v_i v_1) = 1$ and $f(v_i v_2) = 2$. Note that
+  that $f(v_1v_2) = -f(v2 v1)$ so this definition is consistent. Since
+  $v_1$ and $v_2$ have degree $3$ and all entering edges have the same
+  flow value, no flow accumulates on $v_1$ or $v_2$. Similarly for
+  $v_3$ and $v_4$, since the two edges entering have flow $1$ and $2$
+  no flow accumulates at $v_3$ and $v_4$. Thus $G_3$ has a
+  $3$-flow. Combining the flows on $G_1$, $G_2$, and $G_3$ yields the
+  desired $3$-flow on $G$.
+\end{proof}
+
+\begin{theorem} (6.6.1) Every bridgeless graph has a $6$-flow.
+\end{theorem}
+\begin{proof}
+\end{proof}
+
+\begin{theorem} (9.1.1) For every $r \in \mathbb{N}$ there exists an
+  $n \in \mathbb{N}$ such that every graph of order at least $n$
+  contains either $K^r$ or $\bar{K^r}$ as an induced subgraph.
+\end{theorem}
+\begin{proof} Let $R(s,t)$ be the least $n$ such that every graph on
+  $n$ vertices contains either $K^s$ or $\bar{K^t}$ as an induced
+  subgraph. Note that $R(1,t)$ and $R(s, 1)$ exits. Now consider
+  $R(s,t)$. Let $G$ be a graph on $R(s-1, t) + R(s, t-1)$
+  vertices. Pick a vertex $v \in G$. If $|N(v)| \geq R(s - 1, t)$,
+  then either $N(v) + v$ contains a $\bar{K^t}$ or a
+  $K^{s}$. Otherwise the non-edges have size at least $R(s, t - 1)$,
+  once again implying the existence of $\bar{K^t}$ or $K^s$ in
+  $G - N(v)$.
+\end{proof}
+
+\begin{theorem} (7.1.1 Turan's Theorem) For all integers $r, n$ with
+  $r \geq 1$, every graph $G$ not containing $K^r$ with $n$ vertices
+  and $ex(n, K^r)$ edges is $T^{r-1}(n)$.
+\end{theorem}
+\begin{proof} In this proof I will show that if a graph with the
+  maximum number of edges must be a complete partite graph. Since
+  $T^{r-1}(n)$ contains the most edges among complete partite graphs
+  $K^r$ free graphs, the theorem will have been proved. Let $G$ be a
+  graph with the maximum number of edges such that $G$ does not
+  contain a $K^r$. Assume that $G$ is not a complete $k$-partite
+  graph. Then there exists vertices $x$, $y_1$, and $y_2$ such that
+  $xy_1$ and $xy_2$ are not edges in $G$, but $y_1y_2$ is an edge in
+  $G$. If $d(x) < y_i$, then deleting $x$ and duplicating $y_i$
+  results in a new graph $G'$ which still must be $K^r$ free and has
+  more edges than $G$. Otherwise $d(x) \geq y_i$. But then deleting
+  $y_1$ and $y_2$ and replacing them with $2$ copies of $x$ once again
+  creates a new graph $G'$ which is $K^r$ free with more
+  vertices. Thus $G$ must be complete $r$ partite, finishing the
+  proof.
+\end{proof}
+
+\begin{theorem} (7.1.2 Erdos Stone) For all integers $r \geq 2$ and
+  $s \geq 1$, and every $\gamma > 0$, there exists an integer $n_0$
+  such that every graph with $n \geq n_0$ vertices and at least
+  $t_{r-1}(n) + \gamma n^2$ edges contains $K^{r}_{s}$ as a subgraph.
+\end{theorem}
+\begin{proof} Let $n_0$ be large enough. By regularity, let
+  $\epsilon > 0$, then there is an $\epsilon$-regular partition of $G$
+  into sets $V_0, V_1, \cdots V_k$ with $m \leq k \leq M$. Let
+  $\ell = |V_i|$ for $i > 0$. Let $d > 0$ and $R$ be the regularity
+  graph associated with $d$ (the epsilon regular pairs of $G$ with
+  density at least $d$ for edges in $R$). It is known that if $s$ is a
+  fixed constant, then $G$ contains $R_s$ when $n_0$ large
+  enough. Thus it suffices to show that $R$ must contain $K^r$. Assume
+  to the contrary, then $||R|| < t_{r -1}(k)$.For each edge in $R$ we
+  can get at most $\ell^2$ edges in $G$. Since we have an epsilon
+  regular partition, there fewer than $\epsilon n^2$ edges from
+  derived from pairs $V_i, V_j$ which are not epsilon
+  regular. Finally, in the non-edges in $R$, there are at most $d n^2$
+  possible edges. Thus the number of edges in $G$ is strictly smaller
+  than
+  $t_{r-1}(k) \ell^2 + (d + \epsilon)n^2 = t_{r-1}(kl) + (d +
+  \epsilon)n^2 \leq t_{r-1}(n) + (d + \epsilon)n^2$.  Picking
+  $d + \epsilon < \gamma$ yields that
+  $||G|| < t_{r - 1}(n) + \gamma n^2$, a contradiction.
+\end{proof}
+
+\begin{theorem} (7.2.1) There is a constant $c \in \mathbb{R}$ such
+  that for every $r \in \mathbb{N}$, every graph $G$ of average degree
+  $d(G) \geq cr^2$ contains $K^r$ as a topological minor.
+\end{theorem}
+\begin{proof} We will prove this with $c = 10$. From Mader's Theorem
+  (1.4.3), we get that $G$ contains an $r^2$ connected graph $H$. Pick
+  $r$ distinct vertices $V$ in $G$ as branch vertices along with $r-1$
+  neighbors for each branch vertex chosen. Note they must exists since
+  $\delta(H) \geq \kappa(H) \geq r^2$. From another theorem, note that
+  $H$ is $\frac{1}{2}r^2$ linked (by an unlisted theorem). Thus we can
+  pair off the neighbors of the $r$ branch vertices with one from each
+  branch and by the linkedness we obtain a $K^r$.
+\end{proof}
+
+\begin{theorem} (Blowup Lemma 7.5.2) For all $d \in (0, 1]$ and
+  $\Delta \geq 1$, there exists an $\epsilon_0 > 0$ with the following
+  property: if $G$ is any graph, $H$ is a graph with
+  $\Delta(H) \leq \Delta$, $s \in \mathbb{N}$ and $R$ is any
+  regularity graph of $G$ with parameters $\epsilon \leq \epsilon_0$,
+  $\ell \geq 2s/d^\Delta$, and $d$., then
+  $H \subseteq R_s \implies H \subseteq G$.
+\end{theorem}
+\begin{proof}
+\end{proof}
+
+\begin{theorem} (7.4.1 Regularity) For every $\epsilon > 0$ and every
+  integer $m \geq 1$ there exists an integer $M$ such that every graph
+  of order at least $m$ admits an $\epsilon$-regular partition
+  $\{V_0, V_1, \ldots, V_k\}$ with $m \leq k \leq M$.
+\end{theorem}
+\begin{proof}
+\end{proof}
+
+\begin{theorem} (9.2.2) For every positive integer $\Delta$, there
+  exists a constant $c$ such that $R(H) \leq c |H|$, for all graphs
+  $H$ with $\Delta(H) \leq \Delta$.
+\end{theorem}
+\begin{proof} % Let $H$ be a graph with $\Delta(H) = \Delta$. Let $G$
+  be a graph with $|G| \geq c |H|$. Let $\epsilon_0$ and $n_o$ be the
+  results returned by the blow up level which allow a regularity graph
+  to be blown up to a size of $|H|$. For an epsilon regular partition
+  of $G$ into $k$ sets with size $\ell$, let $R$ be the regularity
+  graph on density $0$. Then
+  $||R|| \geq {k \choose 2} - \epsilon k^2$. By choosing $\epsilon$
+  small enough, we are guaranteed that $||R|| \geq t_{m - 1}(k)$. Let
+  $R'$ be the
+\end{proof}
+
+\begin{theorem} (5.4.1) There is a function
+  $f:\mathbb{N} \to \mathbb{N}$ such that given any integer $k$, all
+  graphs $G$ with average degree $d(G) \geq f(k)$ satisfy
+  $ch(G) \geq k$.
+\end{theorem}
+\begin{proof} Let $G$ be a graph with average degree at least
+  $d \geq f(k)$. Then $G$ contains a bipartite subgraph $H$ with
+  $\delta(H) \geq \frac{d}{4}$. Such a graph can be obtained from $G$
+  by iteratively deleting vertices from $G$ with degree less than
+  $\frac{d}{2}$, until no other vertices remain and letting $H$ be the
+  bipartite graph with the maximum number of edges. Note that by the
+  definition of $H$, it is the induced bipartite graph, and if there
+  is a vertex with degree less than $\frac{d}{4}$, moving that vertex
+  to the other partition will induce a bipartite graph with more
+  edges. Let $(A,B)$ be the bipartition of $H$ and assume
+  $|A| \geq |B|$. Let $S$ be a set of $s^4$ colors. We will show that
+  there is a $s$-list assignment of $H$ with colors taken from $S$
+  such that $H$ contains no proper coloring. This immediately implies
+  that $ch(G) \geq ch(H) > s$, completing the proof.
+
+  Consider a a random list assignment, where for each vertex
+  $b \in B$, $S(b)$ is a random list of size $s$ chosen independently
+  and uniformly from $S$. Call a vertex in $A$ good if for every
+  subset $C \subset S$ with $|C|=S$, there exists a $b \in N(a)$ with
+  $S(b) = C$. The probability that a vertex $a$ is not good is
+  \[
+    {s^4 \choose s} {(1 - \dfrac{1}{{s^4 \choose s}})}^{\frac{d}{4}}
+    \leq \dfrac{1}{2}
+  \]
+  by choice of $d$.
+
+  Fix a list assignment of $B$ such that there are at least $|A|/2$
+  good vertices, which exists since the probability a list is good is
+  at least $1/2$. Now consider a random $s$-list assignment for each
+  $a \in A$. We will show that with positive probability there is not
+  proper coloring of $H$.
+
+  There are $s^{|B|}$ possible colorings of $B$. For a fixed coloring,
+  consider the probability that this coloring can be extended to the
+  vertices in $A$. Consider a good vertex $a \in A$. Since every
+  possible $s$ subset of $S$ is in the neighborhood of $a$, at most
+  $s-1$ colors can be assigned to $a$ given the coloring $c$
+  restricted to $B$, as otherwise some subset of ${S \choose s}$ has
+  no elements in $c$ restricted to $B$, contradicting the goodness of
+  $a$. Thus a proper coloring of $H$ can only exists if $S(a)$
+  contains one of the remaining colors $s-1$ colors. The probability
+  that a randomly chosen subset satisfies this is at most
+  \[
+    \dfrac{(s-1) {s^4 -1 \choose s-1}}{{s^4 \choose s}} =
+    \dfrac{s(s-1)}{s^4} < \dfrac{1}{s^2}
+  \]
+  Since there are at least $|A|/2$ good vertices, the chances that
+  there is a proper coloring is strictly less than
+  \[
+    {(\frac{1}{s^2})}^{|A|/2} \leq \dfrac{1}{s^{|B|}}
+  \]
+  Since there are only $s^{|B|}$ colorings of $B$, with positive
+  probability, there exists a list assignment of $A$ such that $A$ is
+  not colorable for any coloring of $B$.
+\end{proof}
+
+\begin{theorem} (11.1.3) For every integer $k \geq 3$, the Ramsey
+  number of $k$ satisfies $R(k) \geq 2^{k/2}$.
+\end{theorem}
+\begin{proof} For $k = 3$, it is true that
+  $R(3) \geq 3 > 2^\frac{3}{2}$. So assume that $k \geq 4$. Consider a
+  random edge-coloring of $K^{n}$ for $n \leq 2^{\frac{k}{2}}$ by two
+  colors, where each color is chosen with probability $\frac{1}{2}$
+  for every edge. Let $r$ denote the size of the largest clique of
+  color $1$ and $s$ denote the size of the largest clique of number
+  $2$. Then
+  \[
+    \begin{array}{rcl} \Pr(r \geq k) & = & \Pr(s \geq k) \leq {n
+                                           \choose k} 2^{-{k \choose 2}}\\
+                                     & < & \dfrac{n^k}{2^k}
+                                           2^{\frac{-k(k-1)}{2}}\\
+                                     & = &
+                                           \dfrac{2^{\frac{k^2}{2}}}{2^k}
+                                           2^{\frac{-k(k-1)}{2}}\\
+                                     & = & 2^{\frac{-(k-1)}{2}}\\
+                                     & < & \dfrac{1}{2}
+    \end{array}
+  \]
+  Since $\Pr(r \geq k) + \Pr(s \geq k) < 1$, we get that there must
+  exist a coloring of $K^{n}$ such that no clique of size $k$ exists
+  for either color implying $R(k) \geq 2^{\frac{k}{2}}$.
+\end{proof}
+
+\begin{theorem} (11.2.2) For every integer $k$, there exists a graph
+  $H$ with girth $g(H) > k$ and chromatic number $\chi(H) > k$.
+\end{theorem}
+\begin{proof} Assume that $k \geq 3$ and let
+  $0 < \epsilon < \frac{1}{k}$. Let $p = n^{\epsilon - 1}$. Let $X$ be
+  the expected number of cycles with size at most $k$. Then we get
+  that
+  \[
+    E[X] = \sum_{i = 3}^{k} \dfrac{{(n)}_i}{2i} p^i \leq \dfrac{1}{2}
+    \sum_{i = 3}^{k} n^i p^i \leq \dfrac{1}{2} (k - 2) n^k p^k
+  \]
+
+
+  Note the last inequality holds since $np = n^\epsilon > 1$. But then
+  from Markov's inequality we get that
+  \[
+    \Pr(X \geq \frac{n}{2}) \leq \dfrac{E[X]}{\frac{n}{2}} \leq
+    (k-2)n^{k - 1} p^k = (k-2) n^{k \epsilon - 1}
+  \]
+
+
+  By choice of $\epsilon$, $k \epsilon - 1 < 0$. Thus we can pick $n$
+  such that $\Pr(X \geq \frac{n}{2}) \leq \frac{1}{2}$.
+
+  Now consider $\Pr(\alpha \geq \frac{n}{k})$.
+  \[
+    \Pr(\alpha \geq \frac{n}{2k}) \leq {n \choose \frac{n}{2k}}
+    p^{\frac{n}{2k} \choose 2} \leq n^{\frac{n}{2k}}
+    n^{\frac{{(\frac{n}{2k} - 1)}^2}{2}(\epsilon - 1)}
+  \]
+  From this we can see that when $n$ is large enough
+  $\Pr(\alpha \geq \frac{n}{2k}) < \frac{1}{2}$. Choose $n$ large
+  enough such that $\Pr(X \geq \frac{n}{2} < \frac{1}{2})$ and
+  $\Pr(\alpha \geq \frac{n}{2k} < \frac{1}{2})$. Then there exists a
+  graph $G$ on $n$ vertices with $X < \frac{n}{2}$ and
+  $\alpha < \frac{n}{2k}$. For each cycle counted in $X$, delete a
+  vertex to create a graph $G'$. But then
+  \[
+    \chi(G') \geq \dfrac{|G'|}{\alpha(G')} >
+    \dfrac{\frac{n}{2}}{\frac{n}{2k}} = k
+  \]
+
+\end{proof}
+
+\section{Example Problems}
+\begin{problem} For any integer $n \geq 3$ and onto coloring
+  $f: E(K^n) \to [n]$ of the edges of $K^n$, show that $K^n$ contains
+  a rainbow triangle, a $K^3$ with all edges a distinct color.
+\end{problem}
+\begin{proof} Let $C$ be a minimum size rainbow cycle in $K^3$ under
+  the coloring $f$. Note such a cycle must exists because there are at
+  least $n$ edges with distinct colors, implying a subgraph of $K^n$
+  with one edge of each color must contain a a rainbow cycle. If $C$
+  is a $K^3$, then we are done. Otherwise $C$ has a chord $xy$ with
+  some color $a$. The edge $xy$ is contained in two cycles $C_1$ and
+  $C_2$ using the edges in $C$ and $xy$ itself. Since $C$ is a rainbow
+  triangle, one of the cycles $C_i$ must not contain the color $a$ on
+  any of its edges in $C_i \cap C$. But then $C_i$ is a rainbow cycle,
+  contradicting the minimality of $C$.
+\end{proof}
+
+\begin{problem} Let $k$ be a positive integer. Let $G$ be a graph with
+  $\epsilon(G) \geq k$.
+  \begin{itemize}
+  \item[(a)] Let $G'$ be a minimal minor of $G$ with
+    $\epsilon(G') \geq k$. Show that for every vertex $v$ in $G'$ and
+    every vertex $u \in N_{G'}(v)$,
+    $|N_{G'}(u) \cap N_{G'}(u)| \geq k$.
+  \item[(b)] Show that $G$ contains a minor $H$ such that
+    $\delta(H) \geq \min(k, \frac{|H|}{2})$.
+  \end{itemize}
+\end{problem}
+\begin{proof}
+  \begin{itemize}
+  \item[(a)] Let $G'$ be a minimal minor of $G$ with
+    $\epsilon(G') \geq k$. Pick an edge $uv$ in $G'$ and assume for
+    contradiction that $|N_{G'}(u) \cap N_{G'}(u)| < k$. Consider the
+    graph $G'/uv$. Note that $G'$ contains exactly one fewer vertices,
+    and at most $k$ fewer edges. But then $e(G'/uv) \geq k$,
+    contradicting the minimality of $G'$. Thus we get that
+    $|N_{G'}(u) \cap N_{G'}(u)| \geq k$.
+  \item[(b)] Let $G'$ be a minimal minor of $G$ with
+    $\epsilon(G') \geq k$. Since $G$ is a minor of itself with
+    $\epsilon(G) \geq k$, such a $G'$ must exist. From $a$ we get that
+    $\delta(G') \geq k$.
+  \end{itemize}
+\end{proof}
+
+\begin{problem} Show that for every positive integer $k$ there exists
+  an integer $n$ such that for every tournament $T$ on $n$ vertices
+  and every coloring $f: E(T) \to N$, there exists a subtournament
+  $S \subseteq T$ on $k$ vertices such that either for every vertex
+  $v \in V(S)$ all the out edges of $S$ incident to $v$ have the same
+  color or for every vertex $v \in V(S)$ all the out edges of $S$
+  incident of $v$ have different colors.
+\end{problem}
+\begin{proof} Let $R(s,t)$ be the minimum value $n$ such that any
+  tournament $T$ on $n$ vertices and every coloring $f:E(T) \to N$
+  contains either a subtournament $S$ on $s$ vertices such that for
+  all $v \in S$, all out edges of $S$ incident to $v$ have the same
+  color, or $T$ contains a subtournament $S$ on $t$ vertices such that
+  for all $v \in V$, all out edges of $S$ incident to $v$ have a
+  different color.
+
+  Note that the claim holds for $R(1,t) = R(s, 1) = 1$. Fix $s,t$ with
+  $s,t > 1$. Let $T$ be a tournament on at least $2R(s-1)R(s,t-1) + 1$
+  vertices and $f$ a coloring of the edges of $T$. Let $v$ be a vertex
+  in $T$ and $N^{-}_c(v)$ denote set vertices whose out edges incident
+  to $v$ have color $c$ under $f$. If there exists a color $c$ such
+  that $N^{-}_c(v) \geq R(s - 1, t)$, then by the inductive hypothesis
+  we find a tournament $S$ in $N^{-}_c(v)$ such that either $S + v$ or
+  $S$ satisfies the claim for $T$. Otherwise for all vertices
+  $v \in V(T)$ and all colors $c$, we get that
+  $|N^{-}_c(v)| < R(s-1, t)$. Let $v$ be a vertex in $T$ such that
+  $|N^{-}(v)| \geq |T|/2$ and note that such a vertex must exists. Let
+  $A$ be a maximum sized set of vertices such that for all $a$ in $A$,
+  $av$ is an edge in $T$ and for all $a, a'$ in $A$,
+  $f(av) \neq f(a'v)$. Note that if $|S| \geq R(s, t-1)$, then we are
+  once again done by induction. Assume that $|S| < R(s, t-1)$. Since
+  $|N^{-}_c(v)| < R(s-1, t)$, every vertex $s$ in $S$ corresponds to
+  at most $ R(s-1, t)$ other vertices with out edges $e$ incident to
+  $v$ with $f(e) = f(sv)$. Thus
+  \[
+    |G| < |S| R(s, t-1) + |N^{+}(v)| + 1 \leq R(s-1, t)R(s, t-1) +
+    |G|/2 + 1
+  \]
+  But then $|G| \leq 2R(s-1)R(s,t-1) < |G|$, a contradiction, thus
+  completing the proof.
+
+\end{proof}
+
+\begin{problem} Let $a \in N$ and let $G=(V, E)$ be a graph with
+  arboricity $a$. Show that if $B = \{ v \in V | d(g) \geq 5a\}$ and
+  $C$ is a vertex cover of $G$, then $|C| \geq 4|B|/5$.
+\end{problem}
+\begin{proof} Assume to the contrary and let $X = B - C$. Then we
+  immediately know that $|X| > |B|/5$ and that $X$ is an independent
+  set. In particular we get that
+  \[
+    ||G[X \cup N(X)]|| \geq 5a |X|
+  \]
+  By Nash-Williams theorem, we know that
+  \[
+    ||G[X \cup N(X)]|| \leq a (|X \cup N(X)| - 1)
+  \]
+  combining these inequalities gives $4|X| < |N(X)|$ so
+  \[
+    \frac{4}{5} |B| < 4 |X| < |N(X)| \leq |C|
+  \]
+  contradicting our assumption.
+\end{proof}
+
+\begin{problem} Let $G = (V, E)$ be a planar graph.
+  \begin{itemize}
+  \item[(a)] Let $e \in E$. If there are no separating triangles in
+    $G$, then how many triangles can contain $e$.
+  \item[(b)] Show that there is a $5$-coloring of $E$ such that every
+    triangle is a rainbow triangle.
+  \end{itemize}
+\end{problem}
+\begin{proof}
+\item[(a)] Consider an edge $e=xy$ contained in $3$ triangles. Let
+  $v_1$, $v_2$ and $v_3$, be the vertices of these triangles not
+  contained in $e$. WLOG, Note that there cannot be a path from $v_1$
+  to $v_2$ without using $x$, $y$, or $v_3$ as this will generate a
+  $TK^5$ which is not planar. Thus $v_1 xy$ is a separating triangle,
+  implying that an edge $e$ is contained in at most two triangles in a
+  graph $G$ with no separating triangles.
+\item[(b)] The proof will by by induction on $|G|$ and $||G||$. Note
+  that if $G$ is the empty graph, then we are done. Otherwise, assume
+  that $G$ contains no separating triangles. Let $e$ be an edge in
+  $G$. Then $G-e$ can be colored such that all triangles are rainbow
+  colored. Since $e$ is contained in at most $2$ triangles, there are
+  at most $4$ colors used on the edges of the triangles, as such we
+  can color $e$ with the remaining color to construct a coloring of
+  $G$ where every triangle is rainbow colored. Otherwise, let $T$ be a
+  separating triangle. Let $C_i$ be the $i$th component of $G-T$ and
+  let $D_i = G[V(C_i) \cup T]$. By induction each $D_i$ can be colored
+  such that every triangle is rainbow colored. By permuting the
+  colorings of $D_i$, we can obtain a coloring such that all the
+  colorings are the same on $T$ in each $D_i$. Combining these
+  colorings to create an edge coloring on $G$ provides the desired
+  coloring.
+\end{proof}
+
+\begin{problem} Let $G$ be an $A,B$-bigraph with minimum degree
+  $\delta \geq 1$. Show that $G$ has a spanning subgraph $H$ such that
+  for every vertex $a \in A$, $d_H(a) = 1$ and for every vertex
+  $b \in B$, $d_H(b) \leq \lceil d_G(b) / \delta \rceil$.
+\end{problem}
+\begin{proof} Consider a new bipartite graph $G'$ with partition
+  $A-B'$ obtained from $G$ by splitting the neighbors of each vertex
+  $b \in B$ into $\lceil d_G(b) / \delta \rceil$ parts $P_i$ of size
+  at most $\delta$, creating a new vertex $b_i \in B'$ in $G'$ and
+  adding the edges edges from $b_i$ to vertices in $P_i$.  Note that
+  if we can find a matching of $A$ onto $B'$, this will correspond to
+  the desired subgraph of $G$. Consider any set $S \subseteq A$. Then
+  we know that the number of edges leaving $S$ is at least
+  $\delta |S|$. Since $\delta$ is the maximum degree of any vertex in
+  $B$ though we get that $|S| \leq |N(S)$. Therefore by Hall's
+  theorem, there is a perfect matching of $A$ onto $B'$.
+\end{proof}
+
+\begin{problem} Prove that for all $t,w \in Z^+$, there exists an
+  $k \in \mathbb{N}$ such that for every graph $G$ that does not
+  induce $K_{1,t}$ and satisfies $\omega(G) \leq w$.
+  \begin{itemize}
+  \item[(a)] $\chi(G) \leq k$
+  \item[(b)] if $w = t = 3$, then $\chi(G) \leq 5$.
+  \end{itemize}
+\end{problem}
+\begin{proof}
+\end{proof}
+
+\begin{problem} Suppose that $G$ has a $4$-flow. Prove that there
+  exists a multiset $\mathcal{C}$ consisting of cycles in $G$ such
+  that every edge is in exactly two cycles in $\mathcal{C}$.
+\end{problem}
+\begin{proof} The proof will by by induction on $||G||$. To begin with
+  note that if $||G|| = 0$, the claim holds. Now assume $||G|| >
+  0$. To begin with, since $G$ has a $4$-flow, it must contain a flow
+  on the Klein group $\mathbb{Z}_2\times \mathbb{Z}_2$. Let $G_i$ be
+  the graph induced by the edges with a non-zero flow on coordinate
+  $i$. Then each $G_i$ has a $2$-flow and must be an even graph. Since
+  $G$ is nonempty, we may assume that $||G_1|| > 0$. Thus there exists
+  a cycle $C$ in $G_1$. If $C$, a cycle in $G_1$, is edge disjoint
+  from any cycle in $G_2$, then there exists a $4$-flow in $G -
+  E(C)$. Thus by the inductive hypothesis there exists family
+  $\mathcal{C}'$ containing every edge in $G-E(C)$ twice. Adding $C$
+  to $\mathcal{C'}$ twice creates the desired set
+  $\mathcal{C}$. Otherwise there exists a cycle $C'$ in $G_2$ with
+  containing a strict subset of the edges of $C$. Note that
+  $G - E(C) - E(C)$ once again has a $4$-flow so from the inductive
+  hypothesis so it suffices to find cycles to add to the set
+  $\mathcal{C}'$. Let $G''$ be the set of edges in exactly one of $C$
+  or $C'$. Note that $G''$ must be an even graph. Thus we can
+  decompose $G''$ into cycles. Adding $C$, $C'$, and $G''$
+  decomposition to $\mathcal{C}'$ then generates the desire set
+  $\mathcal{C}$.
+\end{proof}
+
+\begin{problem} Show that for all positive integers $k$ there exists
+  an integer $t$ such that if $G$ is a graph with a Hamiltonian path,
+  then either $G$ contains $k$ edge-disjoint cycles or there exists a
+  $t$-set $F \subseteq E(G)$ such that $G-F$ is acyclic.
+\end{problem}
+\begin{proof} The proof will be by induction on $||G||$. To begin
+  with, note that if $G$ is a path, the claim is true. For
+  contradiction, assume that $G$ does not contain $k$ edge-disjoint
+  cycles. To begin, let $e$ be an edge in $G$ which is not contained
+  in any $K_3$. Note that $G/e$ must not contain $k$ edge-disjoint
+  cycles and by induction there is a set of at most $t$ edges $T$ such
+  that $G/e - T$ is acyclic. But then $G-T$ must be acyclic as well
+  since no cycles were destroyed by contracting $e$. Otherwise, every
+  edge $e$ belongs to some $K3$. In particular, consider edges on the
+  Hamiltonian path $P$. Note that every edge $e$ corresponds to some
+  $K_e$ and there are at most two edges $e$ and $e'$ such that
+  $K_e = K_{e'}$. Starting from one end of $P$, construct a set $K$ of
+  $K_3$ which contains $K_e$ for every other edge $e \in P$. Note that
+  each of these $K_e$ must be edge-disjoint all other edges in $K_e$
+  contain a vertex incident to $e$, which is in no other considered
+  vertex. But then $|G| = |P| < 2k$, and $G$ can be made a cyclic by
+  deleting at most ${2k \choose 2}$ edges.
+\end{proof}
+\begin{problem} Show that if $G$ is a graph with order at least $4$
+  and $G$ contains at most one vertex with degree at most two, then
+  $G$ contains a $TK^4$.
+\end{problem}
+\begin{proof} The proof will by by induction on $|G|$. For the base
+  case of $|G|=4$, note that the only graph satisfying the assumption
+  is $K^4$ so we are immediately done.
+
+  Now let $G$ be a graph of order at least $5$ with at most one vertex
+  of degree at most $2$. If $G$ contains a vertex $v$ of degree at
+  most $1$, then $G-v$ satisfies the inductive hypothesis thus
+  containing a copy of $TK^4$ which is contained in $G$. Thus $G$
+  contains exactly one vertex of degree at least $2$. Assume that $G$
+  has no vertex of degree $2$, then $G/e$ for any edge $e$ satisfies
+  the inductive hypothesis, thus $G/e$ contains a $TK^4$ corresponding
+  to a $TK^4$ in $G$ and we are done. Finally, $G$ contains exactly
+  one vertex $v$ of degree 2 to with neighbors $xy$. Note that $G/xv$
+  satisfies the inductive hypothesis and thus completes the proof
+  unless $xy \in E(G)$ and $d(x) = d(y) = 3$. If $N(x) = N(y)$, then
+  $G - x - x - y - v$ contains exactly one vertex $v'$ of degree at
+  most $3$. Also we get that $v'$ is connected to at least one other
+  vertex $u$ which has degree at least $3$ implying there are at least
+  $4$ remaining vertices so $G - x - y - v$ contains a $TK^4$ by the
+  inductive hypothesis, implying $G$ does as well. As a final case,
+  consider when $N(x) \neq N(y)$. Then $(G - v)/xy$ satisfies the
+  inductive hypothesis, completing the proof.
+\end{proof}
+
+\begin{problem} Two distinct vertices $u,v$ are called twins if
+  $N(u) = N(v)$ and a graph is called twinless if it has no
+  twins. Show that a connected twinless planar graph $G$ on at least
+  two vertices has a matching $M$ with $|M| \geq |G|/8$.
+\end{problem}
+\begin{proof}
+\end{proof}
+
+\begin{problem}
+  \begin{itemize}
+  \item[(a)] Show that if a graph $G$ has $\delta(G) \geq 2$, then $G$
+    has a cycle $C$ such that at least one vertex in $C$ has no
+    neighbors in $G-C$.
+  \item[(b)] Show that vertices of the graph $G$ can be covered by at
+    most $\alpha(G)$ pairwise disjoint graphs each isomorphic to a
+    cycle, $K_2$ or $K_1$.
+  \end{itemize}
+\end{problem}
+\begin{proof}
+\item[(a)] Let $P = x_0\cdots x_k$ be a maximum length path in
+  $G$. Let $i$ be the smallest integer such that $x_i x_k$ is an
+  edge. Since $P$ is maximal, $N(x_k) \subseteq V(P)$, because
+  otherwise we could extend the path. But then $x_i P x_k$ forms a
+  cycle $C$ with $N(x_k) \subseteq V(C)$.
+\item[(b)] Construct a sequence of graphs $G_0$ = $G$ and $G_k$ is the
+  empty graph. Construct $G_{i + 1}$ from $G_i$ as follows. Let $P$ be
+  a maximum length path with $x_i$ the endpoint of maximum degree. If
+  $d(x_i) \geq 2$, then there is a cycle $C$ such that
+  $N(x_i) \subset C$ by the same argument as in $(a)$. Let
+  $G_{i+1} = G - C$ and not $N(x_i) \cap G_{i + 1} =
+  \emptyset$. Otherwise, if $d(x_i) = 1$, let $y$ denote the neighbor
+  of $x_i$ and set $G_{i+1} = G - x_i - y$ and note once again that
+  $N(x_i) \cap G_{i+1} = \emptyset$. Finally if $d(x_i) = 0$ let
+  $G_{i + 1} = G - x_i$. Note that at every step, $x_i$ is independent
+  form all previously found $x_j$, so the set of $x_i$ forms an
+  independent set. Thus the procedure was repeated at most $\alpha(G)$
+  times, providing the desired vertex cover.
+\end{proof}
+
+\begin{problem} Prove that every graph $G$ is even or has a vertex
+  partition ${X,Y}$ such that $G[X]$ and $G[Y]$ are both even. (Hint:
+  Consider a vertex $v$ with $d(v)$ odd and modify $G-v$ by changing
+  $G[N(v)]$ to its complement).
+\end{problem}
+\begin{proof} The proof will be by induction on $|G|$. To begin with,
+  note that if $G$ is even, then we are done. Otherwise, let $x$ be a
+  vertex in $G$ with odd degree. Construct a graph $G'$ from $G - x$
+  by replacing $G[N(x)]$ with its complement. Then $G'$ contains a
+  partition $X,Y$ such that $G'[X]$ and $G[Y]$ are even, although $Y$
+  could be the empty set. WLOG assume that $|N(x) \cap X|$ is
+  odd. Then $G[X]$ is still even. On the other hand $G[Y]$ is odd for
+  only the vertices in $N(x)$. But since there are an even number of
+  neighbors of $x$ in $Y$, then $X$ and $Y+x$ gives the desired
+  partition of $G$.
+\end{proof}
+\begin{problem} Let $G$ be a balanced $X,Y$-bigraph such that $(X,Y)$
+  is an $\epsilon$-regular pair. Set $n= |X|=|Y|$ and $d=(X,Y)$. Show
+  that if $0 < \epsilon < d < 1$, then $G$ has a vertex partition
+  $\{V_o, V_1, \cdots V_k\}$ such that
+  $|V_0| \leq 2 \max(\frac{\epsilon n}{d - \epsilon},
+  2{(d-\epsilon)}^{-2})$ and $G[V_i] = C_4$ if $i \in [k]$.
+\end{problem}
+\begin{proof} Let $\{ V_0, V_1, \cdots V_k\}$ with $G[V_i] = C_4$ for
+  $i \in [k]$ with $k$ maximized. Assume for contradiction that
+  $|V_0| > 2 \max(\frac{\epsilon n}{d - \epsilon},
+  2{(d-\epsilon)}^{-2})$. Let $X_0 = V_0 \cap X$ and
+  $Y_0 = Y \cap V_0$. Note that $|X_0| = |Y_0|$ as each $V_i$ must
+  contain an equal number of vertices from each of $X$ and $Y$. From
+  the assumption, we know that
+  $|X_0| = |Y_0| > \frac{\epsilon n}{d - \epsilon}$, and thus that
+  $|d(X_0, Y_0) - d(X, Y)| \leq \epsilon$, and thus we know that
+  $d_0 = d(X_0, Y_0) \geq d - \epsilon$.
+
+  Now note that the number of pairs of vertices in $Y_0$ is bounded by
+  \[
+    {|Y_0| \choose 2 } \leq \dfrac{|Y_0|^2}{2}
+  \]
+  On the other hand, consider the number of such pairs contained in
+  $N(x)$ of $x$ over all such vertices $x$, then
+  \[
+    \sum_{x \in X} {|N(x)| \choose 2} \geq \sum_{x \in X} {\lfloor
+      E[|N(x)|] \rfloor \choose 2 } \geq |X_0| {\lfloor (d - \epsilon)
+      |Y_0| \rfloor \choose 2}
+  \]
+  Since there are no copies of $C_4$ contained in $G[X_0, Y_0]$, we
+  know that
+  \[
+    |X_0| {\lfloor (d - \epsilon) |Y_0| \rfloor \choose 2}\leq
+    \dfrac{|Y_0|^2}{2}
+  \]
+  If
+  $(d - \epsilon) |Y_0| 2^{-1/2} < \lfloor (d - \epsilon) |Y_0|
+  \rfloor$, from these two inequalities we get that
+  \[
+    \dfrac{{(d - \epsilon)}^2 |Y_0|^3}{4} \leq \dfrac{|Y_0|^2}{2}
+  \]
+  implying $|Y_0| \leq 2{(d - \epsilon)}^{-2}$, a contradiction.  Thus
+  $(d - \epsilon) |Y_0| 2^{-1/2} \geq \lfloor (d - \epsilon) |Y_0|
+  \rfloor$, but then $(d - \epsilon) |Y_0| < 3$. On the other hand,
+  since $d-\epsilon < 1$, we get that $|Y_0| \geq 2$. But then going
+  back to the original counts, we get that
+  ${2 \choose 2} \geq 2 {2 \choose 2}$, a contradiction again.
+\end{proof}
+
+\begin{problem} Let $G=K_{2t - 1} - M$ where
+  $V(G) = \{ x_1, \cdots x_t\} \cup \{y_2, \cdots y_t\}$ and $M$ is
+  the set of edge $x_i y_i$. Suppose that $L$ is a list assignment for
+  $G$ such that $|L(x_i)| = t$ for all $i \in [t]$ and
+  $|L(y_i)| = t-1$ for all $i \in [t]\backslash \{1\}$. Show that $G$
+  has an $L$-coloring.
+\end{problem}
+\begin{proof} The proof will be by induction on $t$. To begin with,
+  note that the claim trivially holds for $t= 1$. Otherwise, assume
+  there exists a pair $x_i$ and $y_i$ and a color $\alpha$ such that
+  $\alpha \in L(x_i) \cap L(y_i)$. Remove the color $\alpha$ from all
+  list in $L$ to create a new list assignment $L'$. But then $L'$ on
+  $G-x_i -y_i$ satisfies the inductive hypothesis, we can color
+  $G-x_i-y_i$ and then color $x_i$ and $y_i$ with the color $\alpha$
+  to obtain a proper coloring of $G$. Otherwise, for all pairs
+  $x_i, y_i$, $L(x_i) \cap L(y_i) = \emptyset$. Construct a bipartite
+  graph from the vertices of $G$ to colors listed in $L$, were the
+  edge $v c$ exists iff $c \in L(v)$. The current goal is to find a
+  matching from $V(G)$ to colors $c$. Let $S$ be a subset of
+  $V(G)$. If $|S| < t-1$, then by definition of $G$,
+  $N(S) \geq t-1 \geq |S|$. If the $|S| = t$, then there must exists a
+  vertex $x_i \in S$ by pigeon hole principle, thus
+  $N(S) \geq t = |S|$. Finally let $S > t$. Then by pigeon hole
+  principle there must exists a pair $x_i$ $y_i$ with
+  $x_i, y_i \in S$. But then $N(S) \geq 2t - 1 \geq |S|$. Thus there
+  is a matching from $V(G)$ to colors, providing a proper coloring of
+  $G$.
+\end{proof}
+
+\begin{problem}
+  \begin{itemize}
+  \item[(a)] Suppose that $G'$ is a $k$-connected subgraph of $G$ and
+    $v \in V(G) \backslash V(G')$ is such that
+    $|N(v) \cap V(G')| \geq k$. Show that $G[V(G') \cup \{ v\}]$ is
+    $k$-connected.
+  \item[(b)] Suppose $G$ is a graph with
+    $\delta(G) \geq \frac{1}{2}|G|$. Show that there exists a
+    partition $\mathcal{P}$ of $G$ into at most $2$ parts such that
+    $G[X]$ is $\frac{|G|}{100}$ connected for each
+    $X \in \mathcal{P}$.
+  \end{itemize}
+\end{problem}
+\begin{proof}
+  \begin{itemize}
+  \item[(a)] Consider a separating set $X$ in
+    $H = G[V(G') \cup \{ v \}]$ and assume for contradiction that
+    $|X| < k$. Let $C$ be the component in $H - X$ containing
+    $v$. Then $V(C) = x$, as otherwise $X$ would be a separating set
+    in $G'$ as well, contradicting that $G'$ is $k$-connected. But
+    then $N(v) \subseteq X$, once again implying that $|X| \geq
+    k$. Thus $H$ is $k$-connected.
+  \item[(b)] To begin, if $G$ is $|G|/100$ connected, then we are
+    done. Otherwise let $X$ be a separating set with $|X| <
+    |G|/100$. Then $G-X$ is made up of components $C_i$. From the
+    minimum degree of $G$ with get that $G[V(C_i) \cup X]$ must
+    contain more than $|G|/2$ vertices. Thus there are only two
+    components $C_i$ as $|V(C_i)| \geq \frac{49}{100} |G|$. But then
+    we also get that $|V(C_i)| \leq \frac{50}{100} |G|$. Let $Y$ be a
+    separating set of $C_i$ and let $x_1$ and $x_2$ be two vertices in
+    separate components. Note that in $G[V(c_i)]$,
+    $\delta(x_i) \geq \frac{49}{100} |G|$. As such,
+    $|Y| \geq |N(x_1) \cap N(x_2)| \geq \frac{47}{100} |G|$, thus
+    $G[V(C_i)]$ is $|G|/100$ connected. Let $P_1$ be the set of
+    vertices in $C_1$ and vertices in $X$ with a majority of their
+    neighbors in $P_1$. Let $P_2$ be the rest. From part $(a)$, we get
+    that $P_1$ and $P_2$ must be $|G|/100$ connected as for any
+    $x \in X$, $|N(x) \cap V(C_i)| \geq \frac{24}{100} |G|$ for some
+    $i$.
+  \end{itemize}
+\end{proof}
+
+\begin{problem} Suppose that $0 < \alpha < 1$ and
+  $k \in \mathbb{Z}^+$. Show that there exists an integer $n_0$ such
+  that for any graph $G=(V,E)$ with $|G| \geq n_0$ and
+  $\delta(G) \geq \alpha|G|$, if $f: E \to [k]$, then $G$ contains a
+  $4$-cycle $C$ such that $|f^{-1}(C)| = 1$.
+\end{problem}
+\begin{proof} Fix $f$ and let $c$ be the color that is assigned most
+  often by $f$ in $G$. Let $G'$ be the graph composed of all edges in
+  $G$ with color $c$. Then
+  $||G'|| \geq \frac{||G||}{k} \geq \frac{\alpha |G|^2}{k}$.  Note
+  that if there exists two vertices $v_1$ and $v_2$ and two more
+  vertices $u_1$ and $u_2$ such that
+  $u_i \in N_{G'}(v_1) \cap N_{G'}(v_2)$, then we are done as
+  $v_1u_1v_2u_2$ form a monochromatic $C_4$. Then
+  \[
+    {|G| \choose 2} \geq \sum_{v \in V(G)} {d(v) \choose 2} \geq
+    \sum_{v \in V(G)} {\lfloor \frac{\alpha}{k} |G| \rfloor \choose 2}
+    = |G|{\lfloor \frac{\alpha}{k} |G| \rfloor \choose 2} \geq
+    \frac{\alpha}{2k} |G| {|G| \choose 2}
+  \]
+  But since $\alpha$ and $k$ are fixed, $|G| \leq \frac{2k}{\alpha}$
+  for the above inequality to be true. Thus if
+  $|G| \geq \frac{2k}{\alpha}$, there must exists such vertices
+  $v_1, v_2, u_1, u_2$ giving a monochromatic $C_4$.
+\end{proof}
+
+\begin{problem} Let $G$ be a planar graph with $\delta(G) \geq
+  3$. Show that $G$ contains an induced matching of size at least
+  $|G| / 16$.
+\end{problem}
+\begin{proof}
+\end{proof}
+
+\begin{problem} Show that for every $\epsilon > 0$, there exists a
+  $c > 0$ such that for ever graph $G$ with
+  $||G|| \geq \epsilon |G|^2$ has at least $c |G|^5$ copies of
+  $K_{2,3}$.
+\end{problem}
+\begin{proof}
+\end{proof}
+
+\begin{problem} A $k$-dominating set in a graph $G=(V,E)$ is a set
+  $W \subseteq V$ such that every vertex $v \in V$ is within distance
+  $k$ of $W$.
+  \begin{itemize}
+  \item[(a)] Show that for every $c$ there is a $D$ such that if $G$
+    is a graph with $\delta(G) \geq c|G|$, then $G$ has a
+    $1$-dominating set of size at most $D \log |G|$.
+  \item[(b)] Show that for every $c$ there is a $D$ such that if $G$
+    is a graph with $\delta(G) \geq c|G|$, then $G$ has a dominating
+    set of size at most $D$.
+  \end{itemize}
+\end{problem}
+\begin{proof}
+  \begin{itemize}
+  \item[(a)] Let $S$ be a random set of $c \ln |G|$ vertices where
+    each vertex is chosen with probability $p$. Then $v$ is not
+    dominated iff $(\{v\} \cup N(V)) \cap S = \emptyset$. Thus the
+    probability that $v$ is not dominated is at most
+    \[
+      {(1 - c)}^{c \ln |G|} \leq e^{-\ln(n)} \leq \dfrac{1}{n}
+    \]
+    But then the expected number of non-dominated vertices $1$. Thus
+    there exists a set of size $c \ln |G| + 1$ that dominates all of
+    $G$, thus proving the theorem.
+  \item[(b)] Let $S$ be a random set of size $\frac{1}{c}$. As before
+    the probability that a vertex $v$ is not dominated is bound by
+    \[
+      {(1 - c)}^{\frac{1}{c}} \leq e^{- 1/ c^2} < c
+    \]
+    But then the expected number of non-dominated vertices is less
+    then $c |G|$. Fix $S$ such that that is the case. Since
+    $\delta(G) \geq c|G|$, we immediately get that the remaining
+    vertices have a neighbor in the 1-dominated vertices, so $S$
+    2-dominates all vertices.
+  \end{itemize}
+\end{proof}
+
+\begin{problem} Let $G=(V,E)$ be a graph with $G: V \to
+  \mathbb{N}$. Then $G$ has an orientation such that
+  $d^-(v) \geq g(v)$ for all $v \in V$ iff every induced subgraph
+  $H \subseteq G$ satisfies
+  \[
+    ||H|| + ||H, G-H|| \geq \sum_{v \in V(H)} g(v)
+  \]
+  (consider an orientation minimizing the error).
+\end{problem}
+\begin{proof}
+\end{proof}
+
+\begin{problem} A graph $G=(V,E)$ is called twinless if for every
+  $u,v \in V$ with $u \neq v$, then $N(u) \neq N(v)$. Show that for
+  every $h$ there is a $c > 0$ such that every twinless graph of order
+  $n \geq 2$ with no $TK_h$ has a matching of size at least $cn$.
+\end{problem}
+\begin{proof}
+\end{proof}
+
+\begin{problem} Prove that every graph $G=(V,E)$ has an independent
+  set of size $\sum_{v \in V} \frac{1}{1 + d(v)}$.
+\end{problem}
+\begin{proof} For a given ordering of vertices, we can construct an
+  independent set by greedily adding a vertex $v$ to the independent
+  set if $v$ has no neighbors preceding itself in the given order. Let
+  $X$ be the size of the generated independent set given a random
+  ordering of vertices $v$. Then by linearity of expectation we get
+  that
+  \[
+    E[X] = \sum_{v \in V} \Pr(v \text{ precedes its neighbors}) =
+    \sum_{v \in V} \frac{1}{1 + d(v)}
+  \]
+  Thus there must exist some ordering which generates in independent
+  set of size at least $\sum_{v \in V} \frac{1}{1 + d(v)}$.
+\end{proof}
+
+\begin{problem} Let $(U,V)$ be an $\epsilon$-regular pair such that
+  $|U| = |V| \geq \frac{1}{\epsilon}$ and
+  $d:= d(U,V) > 2 \sqrt{\epsilon}$. Show that all but at most
+  $\epsilon|U|$ vertices in $U$ have at least $(d - \epsilon )|V|$
+  neighbors in $V$ and all but at most $3\epsilon |U|^2$ pairs
+  $(u, u') \in U \times U$ are such that
+  $|N(u) \cap N(u')| \geq (d^2 - 2\epsilon)|V|$.
+\end{problem}
+\begin{proof}
+\end{proof}
+
+\begin{problem} Let $k \geq 2$. Show that in a $k$-connected graph,
+  any $k$ vertices lie on a common cycle.
+\end{problem}
+\begin{proof} Let $G$ be a $k$-connected graph for $k \geq 2$. Let $A$
+  be a set of $k$ vertices, and $C$ a cycles in $G$ with
+  $|V(C) \cap A|$ maximized. Since $k \geq 2$, $G$ contains a cycle,
+  so such a cycle must exists.
+
+  If $|V(C) \cap A| = k$, then we are done, thus we may assume there
+  exists a vertex $a \in A$ with $a \notin C$. Construct a new graph
+  $G'$ by duplicating the vertex $a$ $k$ times. Let $A'$ be the $k$
+  copies in $G'$ and consider a minimal $A$-$C$ separating set $X$ in
+  $G'$. By minimality of $X$, if $A' \cap X \neq \emptyset$, then
+  $X = A$ because of the symmetry of elements of $A'$. Otherwise,
+  $X \cap A' = \emptyset$ implying that $X$ is a separating set in
+  $G$. If $|X| \geq k$, then by Menger's Theorem, there exists $k$
+  vertex disjoint paths from $A$ to $C$. By the pigeon hole principle,
+  there must exist a path $P$ from $a_i$ to $a_j$ containing no
+  vertices in $A$ in $C$ such that two of the disjoint $k$ paths end
+  on vertices on $P$. These two paths along with $P$ can be used to
+  construct a cycle $C'$ containing $V(C) \cap A$ and $a$,
+  contradicting the maximality of $C$. Thus $|X| < k$. This can only
+  be the case when $X = V(C)$ since $G$ is $k$-connected. But then by
+  Menger's Theorem, there is are $|V(C)|$ edge disjoint paths from
+  $A'$ to $C$. Once again these paths can be used to find a cycle $C'$
+  containing $V(C) \cap A$ and $a$, contradicting the maximality of
+  $C$.
+\end{proof}
+
+\begin{problem} Show that for every $k$, there is $N$ such that for
+  every $n \geq N$ and every coloring $c$ of ${[n]\choose 2}$ there is
+  either a triangle with all edges having distinct colors or a
+  sequence $i_1, i_2, \ldots, i_k$ of distinct elements from $[n]$
+  such that for every $p \in [k - 1]$,
+  $\{i_p, i_{p+1}\}, \cdots \{i_p, i_k\}$ have the same color.
+\end{problem}
+\begin{proof} Let $R(k)$ denote the minimum value of $N$ for which
+  this theorem applies for $k$. Note that for $k = 1$, the claim holds
+  for $N = 1$. The rest of the proof will be by induction. Assume
+  $k > 1$. Let $G$ be the complete graph on $[n]$ for
+  $n > 2R(k-1) + 2{R(k-1)}^2$ and $f$ any coloring of $G$. Let $v$ be
+  a vertex in $G$ and $c$ the color that appears the maximum number of
+  time among edges incident to $v$. Let $N_c(v)$ denote the
+  neighborhood of $v$ using edges with color $c$. If
+  $|N_c(v)| \geq R(k-1)$, then by induction $G[N_c(v)]$ contains a
+  sequence $i_1, i_2, \cdots i_{k-1}$ of distinct elements satisfying
+  the claim, or $G[N_c(v)]$ contains a triangle with all edge colors
+  distinct. This implies that either the sequence
+  $v, i_1, \cdots i_{k -1}$ exists or a triangle with all edge colors
+  distinct exits in $G$, proving the claim true.
+
+  Thus we may assume that no such vertex exists. Then for all vertices
+  $v$ and any color $c$, $N_c(v) < R(k-1)$. Let $v$ be a vertex in $G$
+  and $A$ a minimum set of size at least $R(k - 1)$ such that for any
+  vertex $a \in A$, if the color of $va$ is $c$, then the color of
+  $va'$ being $c$ implies that $a' \in A$. By minimality of $A$ and
+  since $N_c(v) \leq R(k-1)$, we know that $|A| \leq 2R(k-1) - 1$. Let
+  $S = V(G) - \{v\} - A$. Define
+  $S' = \{s \in S | \forall a \in A, f(va) \neq f(as)\}$. Note that
+  $|S'| \geq |S| - 2{R(k-1)}^2$ since each vertex in $a$ could
+  eliminate at most $R(k-1)$ elements from consideration in $S$. Let
+  $s \in S'$. If $G$ does not contain a triangle with each edge having
+  a distinct color, then for all $a \in A$, $f(as) = f(vs)$ by the
+  definition of $S'$. Since $|A| \geq R(k - 1)$ and $N_c(v) < R(k-1)$,
+  there must exist a vertex $a \in A$ such that $f(as) \neq
+  f(vs)$. But then $vas$ forms a triangle with all edges distinct
+  colors. Therefore no such sets $A$ and $S'$ exist. But then we get
+  that
+  \[
+    |G| =|A| + |S| + 1 \leq |A| + |S'| + 2{R(k-1)}^2 + 1 \leq 2R(k-1)
+    + 2{R(k-1)}^2 < |G|
+  \]
+  Thus such a sets $A$ and $S'$ must exist and $G$ contains a triangle
+  with all edges having distinct color.
+\end{proof}
+
+\end{document}
